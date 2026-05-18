@@ -1,11 +1,18 @@
 import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { Calendar, Clock, ArrowRight } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { blogPosts } from '@/site-data/blog'
 
 export default function blog() {
   return (
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
-              <Badge variant="burgundy" className="mb-4">Insights & Perspectives</Badge>
+              <Badge className="bg-[#800020] text-white hover:bg-[#800020]/80 mb-4">Insights & Perspectives</Badge>
               <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal leading-tight">
                 Latest from the Blog
               </h2>
