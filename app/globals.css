@@ -7,9 +7,30 @@
   --color-burgundy-light: #9e0b2d;
   --color-burgundy-dark: #5c0017;
   --color-gold: #d4af37;
+  --color-gold-light: #f4cf57;
+  --color-gold-dark: #b48f17;
   --color-charcoal: #333333;
   --color-warm-beige: #f5f5dc;
+  
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-gold: 0 10px 15px -3px rgba(212, 175, 55, 0.2);
 }
+
+@layer utilities {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-md border border-white/10;
+  }
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-gold via-gold-light to-gold-dark bg-clip-text text-transparent;
+  }
+  .bg-gradient-burgundy {
+    @apply bg-gradient-to-br from-burgundy via-burgundy-dark to-black;
+  }
+}
+
 
 @layer base {
   :root {

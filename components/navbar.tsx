@@ -1,51 +1,92 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { useState } from "react"
+import { usePathname } from "next/navigation"
+import { Menu, X, ArrowRight } from "lucide-react"
+import { useState, useEffect } from "react"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const navLinks = [
+    { name: "Home", href: "/" },
     { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
+    { name: "Books", href: "/books" },
     { name: "Resources", href: "/resources" },
     { name: "Blog", href: "/blog" },
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        scrolled
+          ? "bg-white/90 backdrop-blur-lg shadow-md border-b border-burgundy/5 py-2"
+          : "bg-white/60 backdrop-blur-md py-4"
+      )}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <span className="font-poppins text-xl font-bold tracking-tight text-primary">Taiwo Olanrewaju</span>
+            <Link href="/" className="flex items-center group">
+              <span className={cn(
+                "font-poppins text-2xl font-black tracking-tighter transition-colors text-burgundy"
+              )}>
+                TAIWO<span className="text-gold group-hover:text-gold-light transition-colors">OLANREWAJU</span>
+              </span>
             </Link>
           </div>
-          
-          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Link
-              href="/book"
-              className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+
+          <nav className="hidden md:flex items-center space-x-8 text-sm font-bold uppercase tracking-widest">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={cn(
+                    "transition-all relative group",
+                    isActive ? "text-burgundy" : "text-burgundy/70 hover:text-burgundy"
+                  )}
+                >
+                  {link.name}
+                  <span className={cn(
+                    "absolute -bottom-1 left-0 h-0.5 bg-gold transition-all duration-300",
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  )} />
+                </Link>
+              )
+            })}
+            <Button
+              asChild
+              className={cn(
+                "rounded-full px-6 font-bold transition-all transform hover:scale-105 active:scale-95 bg-burgundy text-white hover:bg-burgundy-dark shadow-lg shadow-burgundy/20"
+              )}
             >
-              Book Appointment
-            </Link>
+              <Link href="/book">
+                Book Now <ArrowRight className="ml-2 w-4 h-4" />
+              </Link>
+            </Button>
           </nav>
 
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground ml-2"
+              className={cn(
+                "inline-flex items-center justify-center p-2 rounded-full transition-colors text-burgundy bg-burgundy/5"
+              )}
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? (
@@ -60,26 +101,34 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden border-b">
-          <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3 bg-background">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
+        <div className="md:hidden bg-white/95 backdrop-blur-xl border-b border-burgundy/10 shadow-2xl animate-in slide-in-from-top-4 duration-300">
+          <div className="space-y-4 px-6 pb-10 pt-6">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "block text-2xl font-black font-poppins transition-colors",
+                    isActive ? "text-gold" : "text-burgundy hover:text-gold"
+                  )}
+                >
+                  {link.name}
+                </Link>
+              )
+            })}
+            <div className="pt-4 border-t border-burgundy/5">
+              <Button
+                asChild
+                className="w-full bg-burgundy text-white py-8 text-xl font-bold rounded-2xl shadow-xl"
                 onClick={() => setIsOpen(false)}
-                className="block rounded-md px-3 py-2 text-base font-medium text-foreground/70 hover:bg-accent hover:text-accent-foreground"
               >
-                {link.name}
-              </Link>
-            ))}
-            <div className="px-3 py-2">
-              <Link
-                href="/book"
-                onClick={() => setIsOpen(false)}
-                className="flex w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-base font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
-              >
-                Book Appointment
-              </Link>
+                <Link href="/book">
+                  Book Appointment
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -87,3 +136,4 @@ export default function Navbar() {
     </header>
   )
 }
+

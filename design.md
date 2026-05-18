@@ -226,7 +226,7 @@ CTA:
 - Must NOT sync to Greatway CRM
 
 ## Paid Book Section
-- Stripe integration
+- Paypal integration
 - Download link after purchase
 - Buyer info sync to HubSpot CRM
 - Must NOT sync to Greatway CRM
@@ -278,7 +278,7 @@ Digital product buyers must remain separated from Greatway CRM.
 - Google Meet API
 - HubSpot Free CRM API
 - Greatway CRM API/Webhooks
-- Stripe payment integration
+- Paypal payment integration
 
 ## Performance
 - Fast loading
