@@ -1,26 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  ExternalLink, 
-  ShieldCheck, 
+import {
+  ExternalLink,
+  ShieldCheck,
   ArrowRight,
   Wrench,
   Zap,
   Layers,
-  Heart
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 const AFFILIATES = [
-  { name: "QuickBooks", desc: "The gold standard for small business accounting and tax organization.", logo: "QB", color: "burgundy" },
-  { name: "Wealthsimple", desc: "Commission-free investing platform with an intuitive user experience.", logo: "WS", color: "gold" },
-  { name: "Notion", desc: "The ultimate workspace for personal organization and team collaboration.", logo: "N", color: "burgundy" },
-  { name: "HubSpot", desc: "World-class CRM for managing relationships and scaling your client base.", logo: "HS", color: "gold" },
-  { name: "Canva Pro", desc: "Democratizing professional design for marketing and social media.", logo: "C", color: "burgundy" },
-  { name: "Stripe", desc: "The most reliable infrastructure for digital payments and e-commerce.", logo: "S", color: "gold" },
+  { name: "WealthSimple", desc: "Join me on Wealthsimple and get $25 when you fund any account with my referral code H49DAD 🎁 T&Cs", logo: "WS", color: "burgundy", link: "https://my.wealthsimple.com/app/signup?is_retargeting=true&source_caller=ui&shortlink=3i2t30pp&c=referral-promocode-share-link-2023&pid=referral&af_xp=custom&af_reengagement_window=30d&referralcode=H49DAD" },
+  { name: "Insurely ", desc: "Compare and save an average of $428 a year* on Your Home Insurance", logo: "IS", color: "gold", link: "https://stan.store/FinanceWithTee " },
 ];
 
 const fadeIn = {
@@ -37,7 +34,7 @@ export default function AffiliatesPage() {
         <div className="absolute inset-0 z-0 opacity-10">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
         </div>
-        
+
         <div className="container relative z-10 mx-auto px-4 text-center max-w-4xl">
           <motion.div
             initial="initial"
@@ -86,9 +83,13 @@ export default function AffiliatesPage() {
                       {item.desc}
                     </p>
                     <div className="mt-auto">
-                      <Button variant="outline" className="w-full h-14 rounded-2xl border-burgundy/10 text-burgundy font-black uppercase tracking-widest text-xs hover:bg-burgundy hover:text-white transition-all flex items-center justify-center gap-2">
-                        Get Started <ExternalLink className="w-4 h-4" />
-                      </Button>
+                      <Link href={item.link} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          className="w-full h-14 rounded-2xl border-burgundy/10 text-burgundy font-black uppercase tracking-widest text-xs hover:bg-burgundy hover:text-white transition-all flex items-center justify-center gap-2">
+                          Get Started <ExternalLink className="w-4 h-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -97,7 +98,7 @@ export default function AffiliatesPage() {
           </div>
 
           {/* Partner Highlight */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -106,7 +107,7 @@ export default function AffiliatesPage() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
             <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <Badge  className="mb-6">Corporate Partners</Badge>
+                <Badge className="mb-6">Corporate Partners</Badge>
                 <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">Becoming a Partner</h2>
                 <p className="text-lg text-white/70 mb-10 max-w-xl">
                   Are you a service provider interested in collaborating? We are always looking for partners who align with our mission of financial empowerment.

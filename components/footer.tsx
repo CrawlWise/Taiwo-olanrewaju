@@ -38,7 +38,6 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-6 font-poppins text-gold">Resources</h3>
             <ul className="space-y-4 text-white/70">
               <li><Link href="/books" className="hover:text-gold transition-colors">Books & Guides</Link></li>
-              <li><Link href="/resources" className="hover:text-gold transition-colors">Free Wealth Tools</Link></li>
               <li><Link href="/affiliates" className="hover:text-gold transition-colors">Partner Links</Link></li>
               <li><Link href="/newsletter" className="hover:text-gold transition-colors">Weekly Newsletter</Link></li>
             </ul>
@@ -49,15 +48,15 @@ export default function Footer() {
             <ul className="space-y-4 text-white/70">
               <li className="flex items-center gap-3">
                 <Mail size={18} className="text-gold" />
-                <span>hello@taiwoolarenwaju.com</span>
+                <span>taiwo.olanrewaju@mygreatway.ca</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-gold" />
-                <span>+1 (555) 000-0000</span>
+                <span>+1 613 519 4228</span>
               </li>
               <li className="flex items-center gap-3">
                 <MapPin size={18} className="text-gold" />
-                <span>Toronto, Ontario, Canada</span>
+                <span>6 Antares Drive, Unit 7, Nepean, ON K2E 8A9</span>
               </li>
             </ul>
           </div>

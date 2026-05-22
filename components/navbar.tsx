@@ -26,6 +26,8 @@ export default function Navbar() {
     { name: "Books", href: "/books" },
     { name: "Resources", href: "/resources" },
     { name: "Blog", href: "/blog" },
+    { name: "Contact", href: "/contact" },
+    { name: "Affiliate", href: "/affiliates" },
   ]
 
   return (
@@ -69,16 +71,6 @@ export default function Navbar() {
                 </Link>
               )
             })}
-            <Button
-              asChild
-              className={cn(
-                "rounded-full px-6 font-bold transition-all transform hover:scale-105 active:scale-95 bg-burgundy text-white hover:bg-burgundy-dark shadow-lg shadow-burgundy/20"
-              )}
-            >
-              <Link href="/book">
-                Book Now <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            </Button>
           </nav>
 
           <div className="flex items-center md:hidden">

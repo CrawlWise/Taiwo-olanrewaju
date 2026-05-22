@@ -13,7 +13,11 @@ import {
   Briefcase,
   GraduationCap,
   Calendar,
-  Clock
+  Clock,
+  Heart,
+  Activity,
+  Plane,
+  Stethoscope
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -60,6 +64,72 @@ const blogPosts = [
     readTime: "6 min read",
     image: "/images/book_cover.png",
     slug: "protect-your-estate"
+  }
+];
+
+const partners = [
+  {
+    name: "Canada Life",
+    colorClass: "group-hover/partner:text-[#008a52]",
+    logo: (
+      <svg className="w-8 h-8 text-charcoal transition-colors duration-500 group-hover/partner:text-[#008a52]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" />
+        <path d="M12 8V16" />
+        <path d="M9 11L12 8L15 11" />
+      </svg>
+    )
+  },
+  {
+    name: "Manulife",
+    colorClass: "group-hover/partner:text-[#00a758]",
+    logo: (
+      <svg className="w-8 h-8 text-charcoal transition-colors duration-500 group-hover/partner:text-[#00a758]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 20V8l8 6 8-6v12" />
+        <path d="M12 14v6" />
+      </svg>
+    )
+  },
+  {
+    name: "Sun Life",
+    colorClass: "group-hover/partner:text-[#ffc72c]",
+    logo: (
+      <svg className="w-8 h-8 text-charcoal transition-colors duration-500 group-hover/partner:text-[#ffc72c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+      </svg>
+    )
+  },
+  {
+    name: "Desjardins",
+    colorClass: "group-hover/partner:text-[#00b140]",
+    logo: (
+      <svg className="w-8 h-8 text-charcoal transition-colors duration-500 group-hover/partner:text-[#00b140]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5Z" />
+        <path d="M12 22V12" />
+        <path d="M12 12H7" />
+      </svg>
+    )
+  },
+  {
+    name: "iA Financial",
+    colorClass: "group-hover/partner:text-[#004b87]",
+    logo: (
+      <svg className="w-8 h-8 text-charcoal transition-colors duration-500 group-hover/partner:text-[#004b87]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 20h18L12 4z" />
+        <path d="M12 9v6" />
+        <path d="M10 12h4" />
+      </svg>
+    )
+  },
+  {
+    name: "Empire Life",
+    colorClass: "group-hover/partner:text-[#9e1b32]",
+    logo: (
+      <svg className="w-8 h-8 text-charcoal transition-colors duration-500 group-hover/partner:text-[#9e1b32]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z" />
+        <path d="M3 20h18" />
+      </svg>
+    )
   }
 ];
 
@@ -194,11 +264,10 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-12 bg-charcoal text-white border-y border-white/5">
+      <section className="py-12 bg-charcoal text-white border-y border-white/5 flex items-center justify-between">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { label: "Years Experience", value: "10+", icon: Briefcase },
               { label: "Clients Served", value: "500+", icon: Users },
               { label: "Financial Plans", value: "1.2k+", icon: TrendingUp },
               { label: "Digital Books", value: "3+", icon: BookOpen },
@@ -227,53 +296,150 @@ export default function Home() {
             <Badge className="mb-4">Our Expertise</Badge>
             <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal mb-6">Strategic Financial Solutions</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              Tailored approaches to help you achieve your most ambitious financial goals.
+              I provide expert insurance guidance tailored to your unique needs. 
+              My goal is to help you secure the right coverage for your financial future.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
             {[
               {
-                title: "Personal Wealth Planning",
-                desc: "Comprehensive strategies for retirement, estate planning, and long-term asset protection.",
-                icon: TrendingUp,
+                title: "Life Insurance",
+                icon: Heart,
                 color: "burgundy"
               },
               {
-                title: "Financial Education",
-                desc: "Equipping you with the knowledge to make informed decisions about your money and future.",
-                icon: GraduationCap,
+                title: "Critical Illness Insurance",
+                icon: Activity,
                 color: "gold"
               },
               {
-                title: "Advisor Mentorship",
-                desc: "Expert guidance for aspiring financial professionals looking to build their own successful practice.",
+                title: "Registered & Non Registered Investment Accounts (TFSA, RRSP, RESP, FHSA, Annuities)",
+                icon: TrendingUp,
+                color: "charcoal"
+              }, 
+              {
+                title: "Travel Insurance / Super Visa Insurance",
+                icon: Plane,
+                color: "charcoal"
+              }, 
+              {
+                title: "Health & Dental",
+                icon: Stethoscope,
+                color: "charcoal"
+              }, 
+              {
+                title: "Income Replacement Insurance",
                 icon: Briefcase,
                 color: "charcoal"
-              }
-            ].map((service, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Card className="h-full border-none shadow-premium hover:shadow-2xl transition-all duration-500 group overflow-hidden">
-                  <div className={`h-2 w-full bg-${service.color}`} />
-                  <CardContent className="p-10">
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-8 transition-colors group-hover:bg-${service.color} group-hover:text-white bg-${service.color}/10 text-${service.color}`}>
-                      <service.icon className="w-7 h-7" />
+              }, 
+              {
+                title: "Group Policies & Disability Insurance",
+                icon: Users,
+                color: "charcoal"
+              }, 
+            ].map((service, i) => {
+              // Map colors statically for our new minimalist look
+              const colorMap = {
+                burgundy: {
+                  icon: "text-burgundy bg-burgundy/10 group-hover:bg-burgundy group-hover:text-white",
+                  cardHover: "hover:border-burgundy/20 hover:bg-burgundy/[0.02]",
+                  chevron: "group-hover:text-burgundy"
+                },
+                gold: {
+                  icon: "text-gold-dark bg-gold/15 group-hover:bg-gold group-hover:text-burgundy-dark",
+                  cardHover: "hover:border-gold/30 hover:bg-gold/[0.03]",
+                  chevron: "group-hover:text-gold-dark"
+                },
+                charcoal: {
+                  icon: "text-charcoal bg-charcoal/10 group-hover:bg-charcoal group-hover:text-white",
+                  cardHover: "hover:border-charcoal/20 hover:bg-charcoal/[0.02]",
+                  chevron: "group-hover:text-charcoal"
+                }
+              };
+              const styles = colorMap[service.color as keyof typeof colorMap] || colorMap.charcoal;
+
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05, duration: 0.5 }}
+                  className="h-full"
+                >
+                  <Card className={`relative h-full border border-border/50 bg-white p-6 md:p-7 rounded-2xl transition-all duration-300 ease-out group overflow-hidden ${styles.cardHover} hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.04)]`}>
+                    <div className="relative z-10 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-5">
+                        {/* Elegant Icon Container */}
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ease-out shrink-0 ${styles.icon}`}>
+                          <service.icon className="w-6 h-6" />
+                        </div>
+                        
+                        {/* Title - Non-bold (font-medium) */}
+                        <h3 className="text-base md:text-lg font-medium font-poppins text-charcoal transition-colors duration-300 leading-snug">
+                          {service.title}
+                        </h3>
+                      </div>
+                      
+                      {/* Premium Hover Arrow Indicator */}
+                      <ArrowRight className={`w-4 h-4 text-muted-foreground/60 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out shrink-0 ${styles.chevron}`} />
                     </div>
-                    <h3 className="text-2xl font-bold font-poppins mb-4 text-charcoal group-hover:text-burgundy transition-colors">{service.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed mb-6">{service.desc}</p>
-                    <Link href="/book" className="inline-flex items-center font-bold text-burgundy hover:gap-2 transition-all">
-                      Learn More <ArrowRight className="ml-1 w-4 h-4" />
-                    </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Partners Section */}
+      <section className="relative w-full py-16 bg-white border-y border-border/30 overflow-hidden group">
+        {/* Soft edge-fade masks */}
+        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
+        
+        <div className="container mx-auto px-4 mb-6 text-center">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground/60 font-semibold font-poppins">
+            Trusted Partners We Work With
+          </p>
+        </div>
+
+        {/* Scrolling Ticker Wrap */}
+        <div className="flex w-full overflow-hidden">
+          <div className="flex w-max shrink-0 gap-0 py-2 animate-marquee-scroll select-none">
+            {/* First Set */}
+            <div className="flex shrink-0 items-center gap-16 md:gap-24 pr-16 md:pr-24">
+              {partners.map((partner, index) => (
+                <div 
+                  key={`partner-set1-${index}`}
+                  className="group/partner flex items-center gap-3.5 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 ease-out cursor-pointer"
+                >
+                  <div className="shrink-0 transition-transform duration-300 group-hover/partner:scale-105">
+                    {partner.logo}
+                  </div>
+                  <span className={`text-base md:text-lg font-medium text-charcoal/80 tracking-wide font-poppins whitespace-nowrap transition-colors duration-300 ease-out ${partner.colorClass}`}>
+                    {partner.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {/* Duplicate Set for Infinite Loop */}
+            <div className="flex shrink-0 items-center gap-16 md:gap-24 pr-16 md:pr-24">
+              {partners.map((partner, index) => (
+                <div 
+                  key={`partner-set2-${index}`}
+                  className="group/partner flex items-center gap-3.5 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 ease-out cursor-pointer"
+                >
+                  <div className="shrink-0 transition-transform duration-300 group-hover/partner:scale-105">
+                    {partner.logo}
+                  </div>
+                  <span className={`text-base md:text-lg font-medium text-charcoal/80 tracking-wide font-poppins whitespace-nowrap transition-colors duration-300 ease-out ${partner.colorClass}`}>
+                    {partner.name}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

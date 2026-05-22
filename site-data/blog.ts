@@ -1,4 +1,4 @@
-const blogPosts = [
+export const blogPosts = [
   {
     title: "The 5 Pillars of Wealth Building",
     author: "Albert Eromosele",
