@@ -112,14 +112,12 @@ export default function AboutPage() {
                 <h2 className="text-3xl md:text-4xl font-bold text-charcoal font-poppins mb-6">A Mission Born from Observation</h2>
                 <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
                   <p>
-                    My career in financial services began over a decade ago with a simple observation: the most powerful wealth-building strategies were often reserved for the elite, while the majority were left with generic advice.
+                    I am a licensed insurance advisor with experience in the financial services industry. For years, I have noticed a simple observation: the most powerful wealth building strategies were often reserved for the elite, while the majority were left with generic advice. I saw hardworking individuals, families, and entrepreneurs struggling to navigate a complex system that didn't seem designed for their success. 
                   </p>
                   <p>
-                    I saw hardworking individuals, families, and entrepreneurs struggling to navigate a complex system that didn't seem designed for their success. I decided to change that.
+                  I decided to change that. Today, I am licensed in ONTARIO, ALBERTA, NEW BRUNSWICK, AND QUEBEC. I'm more than just an advisor. I am an educator and a mentor. My goal is to equip you with the tools, knowledge, and confidence to build a legacy that lasts for generations.”
                   </p>
-                  <p>
-                    Today, I am more than just an advisor. I am an educator and a mentor. My goal is to equip you with the tools, knowledge, and confidence to build a legacy that lasts for generations.
-                  </p>
+                 
                 </div>
               </motion.div>
             </div>

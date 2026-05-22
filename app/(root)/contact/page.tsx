@@ -71,10 +71,9 @@ export default function ContactPage() {
                 <h2 className="text-3xl font-bold font-poppins text-charcoal mb-6">Direct Channels</h2>
                 <div className="space-y-6">
                   {[
-                    { title: "Email Address", value: "hello@taiwoolarenwaju.com", icon: Mail, link: "mailto:hello@taiwoolarenwaju.com" },
+                    { title: "Email Address", value: "taiwo.olanrewaju@mygreatway.ca", icon: Mail, link: "mailto:taiwo.olanrewaju@mygreatway.ca" },
                     { title: "Direct Phone", value: "+1 (555) 000-0000", icon: Phone, link: "tel:+15550000000" },
-                    { title: "Corporate Office", value: "123 Financial Ave, Suite 400, Calgary, AB", icon: MapPin, link: "#" },
-                    { title: "Global Reach", value: "Serving clients across North America", icon: Globe, link: "#" }
+                    { title: "Corporate Office", value: "6 Antares Drive, Unit 7, Nepean, ON K2E 8A9 Phone Number: +1 613 519 4228", icon: MapPin, link: "#" },
                   ].map((item, i) => (
                     <div key={i} className="flex gap-5 group">
                       <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-white text-burgundy flex items-center justify-center shadow-sm group-hover:bg-burgundy group-hover:text-white transition-all">
