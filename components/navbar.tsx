@@ -25,10 +25,9 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Books", href: "/books" },
-    { name: "Resources", href: "/resources" },
+    // { name: "Resources", href: "/resources" },
     { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
-    { name: "Affiliate", href: "/affiliates" },
+    { name: "Contact", href: "/contact" }
   ]
 
   return (
