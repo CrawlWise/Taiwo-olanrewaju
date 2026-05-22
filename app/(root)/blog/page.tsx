@@ -1,217 +1,297 @@
 import Image from "next/image";
-import {
-  CalendarDays,
-  Clock3,
-  ArrowLeft,
-  Share2,
-} from "lucide-react";
+import Link from "next/link";
+import { CalendarDays, Clock3, ArrowRight, BookOpen, Sparkles } from "lucide-react";
+import { sanityFetch } from "@/sanity/live";
+import { ALL_POSTS_QUERY, ALL_CATEGORIES_QUERY } from "@/sanity/queries";
+import type { Metadata } from "next";
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: "Blog & Insights | Taiwo Olanrewaju",
+  description:
+    "Thought leadership, career insights, and industry perspectives from Taiwo Olanrewaju — recruitment expert and executive advisor.",
+};
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function estimateReadTime(excerpt?: string | null): number {
+  if (!excerpt) return 3;
+  const words = excerpt.trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil((words * 5) / 238));
+}
+
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────────
+
+export default async function BlogPage() {
+  const [{ data: posts }, { data: categories }] = (await Promise.all([
+    sanityFetch({ query: ALL_POSTS_QUERY }),
+    sanityFetch({ query: ALL_CATEGORIES_QUERY }),
+  ])) as any[];
+
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="relative h-[520px] w-full">
+
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      <section className="blog-hero">
+        {/* Background image */}
+        <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop"
-            alt="Blog cover"
+            src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1920&auto=format&fit=crop"
+            alt="Blog hero background"
             fill
             priority
             className="object-cover"
           />
+        </div>
 
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-black/60" />
+        {/* Overlays */}
+        <div className="blog-hero-overlay" />
+        <div className="blog-hero-gradient" />
 
-          {/* Gradient Accent */}
-          <div className="bg-gradient-burgundy absolute inset-0 opacity-60" />
+        {/* Decorative orb */}
+        <div
+          className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
+          style={{ background: "radial-gradient(circle, #d4af37, transparent 70%)" }}
+        />
 
-          <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-6 pb-16">
-            <button className="glass mb-8 flex w-fit items-center gap-2 rounded-full px-5 py-2 text-sm font-medium text-white transition hover:bg-white/20">
-              <ArrowLeft size={16} />
-              Back to Blog
-            </button>
+        {/* Content */}
+        <div className="blog-hero-content" style={{ minHeight: "62vh" }}>
+          <div
+            className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gold mb-6"
+            style={{ animationDelay: "0.1s", background: "rgba(212,175,55,0.08)" }}
+          >
+            <Sparkles size={14} />
+            Insights &amp; Perspectives
+          </div>
 
-            <span className="mb-5 w-fit rounded-full bg-gold px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-black shadow-[var(--shadow-gold)]">
-              Technology
-            </span>
+          <h1
+            className="animate-fade-up max-w-4xl text-4xl font-extrabold leading-tight text-white md:text-6xl lg:text-7xl"
+            style={{ animationDelay: "0.2s" }}
+          >
+            Ideas That{" "}
+            <span className="text-gradient-gold">Shape Careers</span>
+          </h1>
 
-            <h1 className="max-w-5xl text-4xl font-bold leading-tight text-white md:text-6xl lg:text-7xl">
-              Building Modern Web Applications with Next.js 16
-            </h1>
+          <p
+            className="animate-fade-up mt-6 max-w-2xl text-lg text-white/75 leading-8"
+            style={{ animationDelay: "0.32s" }}
+          >
+            Thought leadership, career insights, and executive perspectives from
+            the forefront of professional recruitment and talent strategy.
+          </p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-white/80">
-              <div className="flex items-center gap-2">
-                <CalendarDays size={16} />
-                <span>May 18, 2026</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Clock3 size={16} />
-                <span>5 min read</span>
-              </div>
-
-              <button className="glass flex items-center gap-2 rounded-full px-4 py-2 text-white transition hover:bg-white/20">
-                <Share2 size={16} />
-                Share Article
-              </button>
+          <div
+            className="animate-fade-up mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-white/60"
+            style={{ animationDelay: "0.44s" }}
+          >
+            <div className="flex items-center gap-2">
+              <BookOpen size={15} />
+              <span>{posts?.length ?? 0} articles published</span>
             </div>
+            <span className="opacity-40">·</span>
+            <span>{categories?.length ?? 0} categories</span>
           </div>
         </div>
+
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, hsl(var(--background)))" }}
+        />
       </section>
 
-      {/* CONTENT */}
-      <section className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-16 lg:grid-cols-3">
-        {/* ARTICLE */}
-        <article className="lg:col-span-2">
-          <div className="rounded-3xl border border-border bg-card p-8 shadow-[var(--shadow-premium)] md:p-12">
-            <p className="text-muted-foreground mb-8 text-lg leading-9">
-              Next.js 16 introduces major improvements in performance,
-              server-side rendering, and developer experience. Whether you’re
-              building SaaS products, dashboards, or enterprise platforms, the
-              latest updates make development significantly faster and more
-              scalable.
-            </p>
+      {/* ── CATEGORY FILTERS ──────────────────────────────────────────────── */}
+      {categories && categories.length > 0 && (
+        <section className="mx-auto max-w-7xl px-6 pt-12 pb-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="text-sm font-semibold text-muted-foreground mr-2 uppercase tracking-wider">
+              Filter:
+            </span>
+            <Link href="/blog" className="filter-pill active" id="filter-all">
+              All Posts
+            </Link>
+            {categories.map((cat: any) => (
+              <Link
+                key={cat._id}
+                href={`/blog?category=${cat.slug?.current ?? ""}`}
+                className="filter-pill"
+                id={`filter-${cat.slug?.current ?? cat._id}`}
+              >
+                {cat.title}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
-            <h2 className="mb-5 text-3xl font-bold text-primary">
-              Why Developers Love Next.js
-            </h2>
-
-            <p className="text-muted-foreground leading-9">
-              Developers choose Next.js because it provides built-in routing,
-              optimized image handling, API support, and powerful rendering
-              strategies out of the box. Combined with React Server Components
-              and Turbopack, applications feel faster and more modern than
-              ever before.
-            </p>
-
-            <div className="my-12 overflow-hidden rounded-3xl">
-              <Image
-                src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
-                alt="Team working"
-                width={1200}
-                height={700}
-                className="h-auto w-full object-cover"
-              />
+      {/* ── POST GRID ─────────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-7xl px-6 py-12">
+        {!posts || posts.length === 0 ? (
+          /* Empty state */
+          <div className="flex flex-col items-center justify-center py-32 text-center gap-6">
+            <div
+              className="w-24 h-24 rounded-full flex items-center justify-center"
+              style={{ background: "rgba(128,0,32,0.08)" }}
+            >
+              <BookOpen size={36} className="text-primary opacity-60" />
             </div>
-
-            <h2 className="mb-5 text-3xl font-bold text-primary">
-              Performance Optimization
-            </h2>
-
-            <p className="text-muted-foreground leading-9">
-              With Turbopack, optimized package imports, and improved caching,
-              applications compile significantly faster. This creates a smoother
-              development workflow while delivering a premium user experience.
-            </p>
-
-            <blockquote className="bg-gradient-burgundy my-12 rounded-3xl border border-white/10 p-8 text-xl leading-9 text-white shadow-[var(--shadow-premium)]">
-              <span className="text-gradient-gold block text-2xl font-bold">
-                “Modern frontend development is no longer just about interfaces.”
-              </span>
-
-              <p className="mt-4 text-white/80">
-                It’s about building scalable digital experiences that feel fast,
-                elegant, and seamless across every device.
-              </p>
-            </blockquote>
-
-            <p className="text-muted-foreground leading-9">
-              As the ecosystem evolves, frameworks like Next.js continue to
-              simplify complex engineering problems while improving developer
-              productivity and user satisfaction.
+            <h2 className="text-2xl font-bold text-foreground">No posts yet</h2>
+            <p className="text-muted-foreground max-w-md">
+              Articles are being prepared. Check back soon for insights and
+              thought leadership content.
             </p>
           </div>
-        </article>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post: any, i: number) => {
+              const imageUrl =
+                post.mainImage?.asset?.url
+                  ? `${post.mainImage.asset.url}?w=800&h=500&fit=crop&auto=format`
+                  : null;
 
-        {/* SIDEBAR */}
-        <aside className="space-y-8">
-          {/* AUTHOR */}
-          <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-premium)]">
-            <div className="flex items-center gap-4">
-              <Image
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop"
-                alt="Author"
-                width={72}
-                height={72}
-                className="rounded-full border-2 border-gold object-cover"
-              />
+              const authorImageUrl =
+                post.author?.image?.asset?.url
+                  ? `${post.author.image.asset.url}?w=64&h=64&fit=crop&auto=format`
+                  : null;
 
-              <div>
-                <h3 className="text-xl font-bold">Albert Eromosele</h3>
-
-                <p className="text-muted-foreground text-sm">
-                  Full Stack Developer
-                </p>
-              </div>
-            </div>
-
-            <p className="text-muted-foreground mt-6 leading-8">
-              Passionate about building scalable web applications using
-              Next.js, FastAPI, Django, and modern frontend technologies.
-            </p>
-          </div>
-
-          {/* CATEGORIES */}
-          <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-premium)]">
-            <h3 className="mb-5 text-xl font-bold text-primary">
-              Categories
-            </h3>
-
-            <div className="flex flex-wrap gap-3">
-              {[
-                "Technology",
-                "Web Development",
-                "React",
-                "Next.js",
-                "AI",
-                "Design",
-              ].map((item) => (
-                <button
-                  key={item}
-                  className="rounded-full border border-border bg-secondary px-4 py-2 text-sm font-medium transition hover:bg-primary hover:text-primary-foreground"
+              return (
+                <Link
+                  key={post._id}
+                  href={`/blog/${post.slug?.current ?? ""}`}
+                  className="blog-card animate-fade-up"
+                  style={{ animationDelay: `${0.08 * i}s` }}
+                  id={`post-card-${post._id}`}
                 >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </div>
+                  {/* Cover image */}
+                  <div className="blog-card-image-wrap">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={post.mainImage?.alt ?? post.title ?? "Post image"}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #800020 0%, #5c0017 60%, #1a0008 100%)",
+                        }}
+                      />
+                    )}
 
-          {/* RELATED POSTS */}
-          <div className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-premium)]">
-            <h3 className="mb-6 text-xl font-bold text-primary">
-              Related Posts
-            </h3>
-
-            <div className="space-y-5">
-              {[1, 2, 3].map((item) => (
-                <div
-                  key={item}
-                  className="group flex gap-4 rounded-2xl transition"
-                >
-                  <div className="relative h-24 w-28 overflow-hidden rounded-2xl">
-                    <Image
-                      src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=600&auto=format&fit=crop"
-                      alt="Related"
-                      fill
-                      className="object-cover transition duration-300 group-hover:scale-105"
-                    />
+                    {/* Category overlay badge */}
+                    {post.categories && post.categories.length > 0 && (
+                      <div className="absolute top-4 left-4">
+                        <span className="blog-tag-primary">
+                          {post.categories[0].title}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="flex-1">
-                    <h4 className="line-clamp-2 font-semibold leading-6 transition group-hover:text-primary">
-                      Creating Fast and Scalable React Applications
-                    </h4>
+                  {/* Card body */}
+                  <div className="blog-card-body">
+                    {/* Title */}
+                    <h2 className="line-clamp-2 text-lg font-bold leading-tight group-hover:text-primary transition">
+                      {post.title}
+                    </h2>
 
-                    <p className="text-muted-foreground mt-2 text-sm">
-                      May 2026 · 4 min read
-                    </p>
+                    {/* Excerpt */}
+                    {post.excerpt && (
+                      <p className="line-clamp-3 text-sm text-muted-foreground leading-6">
+                        {post.excerpt}
+                      </p>
+                    )}
+
+                    <div className="mt-auto pt-4 border-t border-border flex items-center justify-between gap-4">
+                      {/* Author */}
+                      <div className="author-chip">
+                        {authorImageUrl ? (
+                          <img
+                            src={authorImageUrl}
+                            alt={post.author?.name ?? "Author"}
+                            className="author-chip-avatar"
+                          />
+                        ) : (
+                          <div
+                            className="rounded-full border-2 border-gold flex-shrink-0"
+                            style={{
+                              width: 32,
+                              height: 32,
+                              background: "linear-gradient(135deg,#800020,#d4af37)",
+                            }}
+                          />
+                        )}
+                        <span className="author-chip-name truncate max-w-[120px]">
+                          {post.author?.name ?? "Author"}
+                        </span>
+                      </div>
+
+                      {/* Meta */}
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground shrink-0">
+                        {post.publishedAt && (
+                          <div className="flex items-center gap-1">
+                            <CalendarDays size={12} />
+                            <span>{formatDate(post.publishedAt)}</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1">
+                          <Clock3 size={12} />
+                          <span>{estimateReadTime(post.excerpt)} min</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+
+                  {/* Read more CTA strip */}
+                  <div
+                    className="flex items-center justify-between px-6 py-3 text-xs font-semibold text-primary border-t border-border transition-colors hover:bg-primary hover:text-primary-foreground"
+                  >
+                    <span>Read Article</span>
+                    <ArrowRight size={14} />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
-        </aside>
+        )}
+      </section>
+
+      {/* ── CTA BANNER ────────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-7xl px-6 pb-24">
+        <div
+          className="relative overflow-hidden rounded-3xl p-12 text-center"
+          style={{
+            background: "linear-gradient(135deg, #800020 0%, #5c0017 50%, #1a0008 100%)",
+          }}
+        >
+          <div
+            className="absolute -top-20 -right-20 w-72 h-72 rounded-full opacity-10 blur-3xl"
+            style={{ background: "#d4af37" }}
+          />
+          <h2 className="text-3xl font-extrabold text-white md:text-4xl">
+            Want to work together?
+          </h2>
+          <p className="mt-4 text-white/70 text-lg max-w-xl mx-auto">
+            Let&apos;s discuss how I can help you find the right talent or your next
+            career opportunity.
+          </p>
+          <Link
+            href="/contact"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-gold px-8 py-3.5 font-semibold text-black transition hover:bg-gold-light"
+            id="blog-cta-contact"
+          >
+            Get in Touch
+            <ArrowRight size={16} />
+          </Link>
+        </div>
       </section>
     </main>
   );
