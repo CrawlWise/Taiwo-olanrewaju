@@ -25,7 +25,6 @@ export default function Navbar() {
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
     { name: "Books", href: "/books" },
-    { name: "Resources", href: "/resources" },
     { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/contact" },
     { name: "Affiliate", href: "/affiliates" },
@@ -37,7 +36,7 @@ export default function Navbar() {
         "sticky top-0 z-50 w-full transition-all duration-300",
         scrolled
           ? "bg-white/90 backdrop-blur-lg shadow-md border-b border-burgundy/5 py-2"
-          : "bg-white/60 backdrop-blur-md py-4"
+          : "bg-white/90 backdrop-blur-md py-4"
       )}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
