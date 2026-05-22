@@ -19,6 +19,7 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+// This section needs to be updated with what we have on the cloud
 
   const navLinks = [
     { name: "Home", href: "/" },
