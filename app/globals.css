@@ -102,6 +102,254 @@
   50% { box-shadow: 0 0 0 8px rgba(212, 175, 55, 0); }
 }
 
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Partners / Brand Slider Section ──────────────────────────────────────── */
+
+.brand-slider-section {
+  position: relative;
+  padding: 5rem 0 4.5rem;
+  background: linear-gradient(168deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  overflow: hidden;
+}
+
+.brand-slider-bg-glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.brand-slider-bg-glow--left {
+  top: -80px;
+  left: -120px;
+  background: #d4af37;
+}
+
+.brand-slider-bg-glow--right {
+  bottom: -100px;
+  right: -100px;
+  background: #800020;
+}
+
+.brand-slider-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+
+.brand-slider-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.brand-slider-badge {
+  display: inline-block;
+  padding: 0.35rem 1.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #d4af37;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 9999px;
+  background: rgba(212, 175, 55, 0.08);
+  margin-bottom: 1.25rem;
+}
+
+.brand-slider-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.brand-slider-description {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ── Marquee ───────────────────────────────────────────────────────────────── */
+
+.brand-marquee-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.brand-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 1rem 0;
+}
+
+.brand-marquee-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5rem;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.brand-marquee-fade--left {
+  left: 0;
+  background: linear-gradient(to right, #1a1a2e, transparent);
+}
+
+.brand-marquee-fade--right {
+  right: 0;
+  background: linear-gradient(to left, #0f3460, transparent);
+}
+
+.brand-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 2rem;
+  animation: marqueeScroll 40s linear infinite;
+}
+
+.brand-marquee:hover .brand-marquee-track {
+  animation-play-state: paused;
+}
+
+/* ── Company Card ──────────────────────────────────────────────────────────── */
+
+.brand-company-card {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  transition: background 0.35s ease,
+              border-color 0.35s ease,
+              transform 0.35s cubic-bezier(0.22, 0.68, 0, 1.2),
+              box-shadow 0.35s ease;
+  cursor: pointer;
+  user-select: none;
+  min-width: 140px;
+}
+
+.brand-company-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(212, 175, 55, 0.35);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.1),
+              0 0 0 1px rgba(212, 175, 55, 0.15);
+}
+
+/* ── Logo ──────────────────────────────────────────────────────────────────── */
+
+.brand-card-logo-wrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.625rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.brand-company-card:hover .brand-card-logo-wrapper {
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+  transform: scale(1.06);
+}
+
+.brand-card-logo-img {
+  object-fit: contain;
+  padding: 0.25rem;
+}
+
+/* ── Name ──────────────────────────────────────────────────────────────────── */
+
+.brand-card-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  transition: color 0.3s ease;
+  margin-top: 0.25rem;
+}
+
+.brand-company-card:hover .brand-card-name {
+  color: #d4af37;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+
+@media (min-width: 768px) {
+  .brand-slider-section {
+    padding: 6rem 0 5.5rem;
+  }
+
+  .brand-slider-title {
+    font-size: 2.5rem;
+  }
+
+  .brand-slider-description {
+    font-size: 1.0625rem;
+  }
+
+  .brand-marquee-track {
+    gap: 2.5rem;
+  }
+
+  .brand-marquee-fade {
+    width: 8rem;
+  }
+
+  .brand-company-card {
+    padding: 1.5rem 2rem;
+    min-width: 160px;
+  }
+
+  .brand-card-logo-wrapper {
+    width: 112px;
+    height: 112px;
+  }
+
+  .brand-card-name {
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-slider-header {
+    margin-bottom: 3.5rem;
+  }
+
+  .brand-slider-title {
+    font-size: 2.75rem;
+  }
+}
+
 /* ─── Blog Utility Classes ─────────────────────────────────────────────────── */
 
 @layer utilities {
