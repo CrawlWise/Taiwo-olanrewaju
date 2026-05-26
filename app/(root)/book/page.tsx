@@ -2,39 +2,16 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Video, MapPin, X, Calendar, ArrowRight, Clock, ShieldCheck, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-const meetingTypes = [
-  {
-    id: "online",
-    title: "Online Consultation",
-    subtitle: "Virtual Strategy Session",
-    description: "Connect from anywhere via Zoom or Google Meet. Perfect for initial consultations, financial reviews, and strategic planning from the comfort of your home.",
-    icon: Video,
-    color: "burgundy",
-    bgClass: "bg-burgundy",
-    duration: "45-60 mins",
-    link: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0..." // Placeholder
-  },
-  {
-    id: "in-person",
-    title: "In-Person Meeting",
-    subtitle: "Face-to-Face Advisory",
-    description: "A more personal touch. Meet at our professional office for a comprehensive deep dive into your financial future and legacy building.",
-    icon: MapPin,
-    color: "gold",
-    bgClass: "bg-gold",
-    duration: "60-90 mins",
-    link: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1..." // Placeholder
-  }
-];
+import { meetingData } from "@/site-data/book";
+import { meetingTypes } from "@/types/book";
+import { ArrowRight, Clock, ShieldCheck, X } from "lucide-react";
 
 export default function BookPage() {
-  const [selectedMeeting, setSelectedMeeting] = useState<typeof meetingTypes[0] | null>(null);
+  
+const [selectedMeeting, setSelectedMeeting] = useState<typeof meetingTypes[0] | null>(null);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -68,7 +45,7 @@ export default function BookPage() {
       <section className="py-24 -mt-12 relative z-20">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {meetingTypes.map((type, i) => (
+            {meetingData.map((type, i) => (
               <motion.div
                 key={type.id}
                 initial={{ opacity: 0, x: i === 0 ? -30 : 30 }}

@@ -85,3 +85,34 @@ export const ALL_CATEGORIES_QUERY = defineQuery(`
     slug
   }
 `);
+
+// ── All Books by Store Tier ───────────────────────────────────────────────────
+export const ALL_BOOKS_QUERY = defineQuery(`
+  *[_type == "store"] {
+    tier,
+    books[] {
+      title,
+      summary,
+      price,
+      isbn,
+      publishedDate,
+      coverImage {
+        asset->{ url }
+      },
+      coverImageAlt,
+      author-> {
+        name,
+        image { asset->{ url }, alt }
+      },
+      categories[]-> {
+        _id,
+        title,
+        slug
+      },
+      "fileUrl": bookupload.asset->url,
+      paymentLink
+    }
+  }
+`);
+
+
