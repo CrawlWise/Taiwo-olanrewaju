@@ -11,7 +11,7 @@ import { ArrowRight, Clock, ShieldCheck, X } from "lucide-react";
 
 export default function BookPage() {
   
-const [selectedMeeting, setSelectedMeeting] = useState<typeof meetingTypes[0] | null>(null);
+const [selectedMeeting, setSelectedMeeting] = useState<meetingTypes | null>(null);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
