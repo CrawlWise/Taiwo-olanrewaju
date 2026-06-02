@@ -19,13 +19,14 @@ import {
   Activity,
   Plane,
   Stethoscope,
-  ExternalLink
+  ExternalLink,
+  Download
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { client } from "@/sanity/client";
-import { LATEST_POSTS_QUERY } from "@/sanity/queries";
+import { LATEST_POSTS_QUERY, ALL_BOOKS_QUERY } from "@/sanity/queries";
 import  Partners  from "@/components/partners/partners";
 
 const fadeIn = {
@@ -49,21 +50,44 @@ const AFFILIATES = [
 
 export default function Home() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [freeBook, setFreeBook] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchPosts() {
+    async function fetchData() {
       try {
-        const posts = await client.fetch(LATEST_POSTS_QUERY);
+        const [posts, stores] = await Promise.all([
+          client.fetch(LATEST_POSTS_QUERY),
+          client.fetch(ALL_BOOKS_QUERY)
+        ]);
         setBlogPosts(posts || []);
+        
+        let foundFreeBook = null;
+        stores?.forEach((store: any) => {
+          if (store.tier === "free" && store.books?.length > 0) {
+            foundFreeBook = store.books[0];
+          }
+        });
+        if (foundFreeBook) {
+          setFreeBook(foundFreeBook);
+        }
       } catch (error) {
-        console.error("Error fetching latest posts from Sanity:", error);
+        console.error("Error fetching homepage data from Sanity:", error);
       } finally {
         setLoading(false);
       }
     }
-    fetchPosts();
+    fetchData();
   }, []);
+
+  const handleDownload = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (freeBook?.fileUrl) {
+      window.open(freeBook.fileUrl, "_blank");
+    } else {
+      alert("This book PDF is currently being prepared. Check back soon!");
+    }
+  };
 
   function estimateReadTime(excerpt?: string | null): number {
     if (!excerpt) return 3;
@@ -437,8 +461,22 @@ export default function Home() {
             <div className="lg:w-1/2">
               <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">Start Your Journey to Legacy.</h2>
               <p className="text-xl text-white/80 mb-10 leading-relaxed">
-                Download my exclusive guide: <span className="text-gold font-bold">"The Legacy Roadmap"</span>. Learn the 5 essential pillars of wealth building that traditional banks won't tell you.
+                {freeBook ? (
+                  <>
+                    Download my exclusive guide: <span className="text-gold font-bold">"{freeBook.title}"</span>.
+                  </>
+                ) : (
+                  <>
+                    Download my exclusive guide: <span className="text-gold font-bold">"The Legacy Roadmap"</span>. Learn the 5 essential pillars of wealth building that traditional banks won't tell you.
+                  </>
+                )}
               </p>
+
+              {freeBook?.summary && (
+                <p className="text-base text-white/70 mb-8 leading-relaxed">
+                  {freeBook.summary}
+                </p>
+              )}
 
               <ul className="space-y-4 mb-10">
                 {[
@@ -454,11 +492,24 @@ export default function Home() {
                 ))}
               </ul>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="bg-gold hover:bg-gold-light text-burgundy-dark font-bold h-14 px-10 rounded-xl">
-                  <Link href="/books">Download Free Guide</Link>
-                </Button>
-              </div>
+              {freeBook ? (
+                <form onSubmit={handleDownload} className="space-y-4 bg-white/10 p-6 rounded-3xl border border-white/10 w-full max-w-md backdrop-blur-md">
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <input required placeholder="Your Name" className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm" />
+                    <input type="email" required placeholder="Email Address" className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm" />
+                  </div>
+                  <Button type="submit" className="w-full h-12 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-gold">
+                    Send My eBook <Download className="w-4 h-4" />
+                  </Button>
+                  <p className="text-[10px] text-center text-white/50 uppercase tracking-widest font-bold">Sent instantly to your inbox / Direct Download</p>
+                </form>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button asChild size="lg" className="bg-gold hover:bg-gold-light text-burgundy-dark font-bold h-14 px-10 rounded-xl">
+                    <Link href="/books">Download Free Guide</Link>
+                  </Button>
+                </div>
+              )}
             </div>
 
             <div className="lg:w-1/2 flex justify-center">
@@ -468,11 +519,11 @@ export default function Home() {
                 className="relative shadow-[20px_20px_60px_rgba(0,0,0,0.5)] rounded-lg overflow-hidden"
               >
                 <Image
-                  src="/images/book_cover.png"
-                  alt="The Legacy Roadmap Book"
+                  src={freeBook?.coverImage?.asset?.url || "/images/book_cover.png"}
+                  alt={freeBook?.coverImageAlt || freeBook?.title || "The Legacy Roadmap Book"}
                   width={350}
                   height={500}
-                  className="rounded-lg"
+                  className="rounded-lg object-cover"
                 />
               </motion.div>
             </div>

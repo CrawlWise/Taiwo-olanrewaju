@@ -114,25 +114,6 @@ const [selectedMeeting, setSelectedMeeting] = useState<meetingTypes | null>(null
               </motion.div>
             ))}
           </div>
-
-          {/* Social Proof */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="mt-20 flex flex-col items-center justify-center text-center px-4"
-          >
-            <div className="flex -space-x-3 mb-6">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-charcoal/10 flex items-center justify-center text-[10px] font-bold">
-                  {i}+
-                </div>
-              ))}
-            </div>
-            <p className="text-muted-foreground max-w-md">
-              Join <strong>500+ satisfied clients</strong> who have secured their financial legacy through professional guidance.
-            </p>
-          </motion.div>
         </div>
       </section>
 
