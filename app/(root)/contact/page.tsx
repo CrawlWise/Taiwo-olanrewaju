@@ -72,7 +72,7 @@ export default function ContactPage() {
                 <div className="space-y-6">
                   {[
                     { title: "Email Address", value: "taiwo.olanrewaju@mygreatway.ca", icon: Mail, link: "mailto:taiwo.olanrewaju@mygreatway.ca" },
-                    { title: "Direct Phone", value: "+1 (555) 000-0000", icon: Phone, link: "tel:+15550000000" },
+                    { title: "Direct Phone", value: "+1 613 519 4228", icon: Phone, link: "tel: +1 613 519 4228" },
                     { title: "Corporate Office", value: "6 Antares Drive, Unit 7, Nepean, ON K2E 8A9 Phone Number: +1 613 519 4228", icon: MapPin, link: "#" },
                   ].map((item, i) => (
                     <div key={i} className="flex gap-5 group">
