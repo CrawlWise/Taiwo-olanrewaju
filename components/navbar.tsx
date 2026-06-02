@@ -19,15 +19,19 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-// This section needs to be updated with what we have on the cloud
+  // This section needs to be updated with what we have on the cloud
 
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Contact", href: "/contact" },
+    { name: "Careers", href: "/careers" },
     { name: "Books", href: "/books" },
     { name: "Blog", href: "/blog" },
-    { name: "Contact", href: "/contact" },
-    { name: "Affiliate", href: "/affiliates" },
+
+    // { name: "Affiliate", href: "/affiliates" },
+
   ]
 
   return (
@@ -46,7 +50,7 @@ export default function Navbar() {
               <span className={cn(
                 "font-poppins text-2xl font-black tracking-tighter transition-colors text-burgundy"
               )}>
-                TAIWO<span className="text-gold group-hover:text-gold-light transition-colors">OLANREWAJU</span>
+                T<span className="text-gold group-hover:text-gold-light transition-colors">O</span>
               </span>
             </Link>
           </div>

@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import {
-  ExternalLink,
   ShieldCheck,
   ArrowRight,
   Wrench,
@@ -11,14 +10,8 @@ import {
   Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-
-const AFFILIATES = [
-  { name: "WealthSimple", desc: "Join me on Wealthsimple and get $25 when you fund any account with my referral code H49DAD 🎁 T&Cs", logo: "WS", color: "burgundy", link: "https://my.wealthsimple.com/app/signup?is_retargeting=true&source_caller=ui&shortlink=3i2t30pp&c=referral-promocode-share-link-2023&pid=referral&af_xp=custom&af_reengagement_window=30d&referralcode=H49DAD" },
-  { name: "Insurely ", desc: "Compare and save an average of $428 a year* on Your Home Insurance", logo: "IS", color: "gold", link: "https://stan.store/FinanceWithTee " },
-];
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -62,40 +55,6 @@ export default function AffiliatesPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {AFFILIATES.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Card className="h-full border-none shadow-premium hover:shadow-2xl transition-all group rounded-[32px] overflow-hidden bg-white">
-                  <CardContent className="p-10 flex flex-col h-full">
-                    <div className="w-16 h-16 rounded-2xl bg-muted/30 flex items-center justify-center text-3xl font-black font-poppins text-charcoal mb-8 group-hover:scale-110 group-hover:bg-burgundy group-hover:text-white transition-all duration-500">
-                      {item.logo}
-                    </div>
-                    <h3 className="text-2xl font-bold font-poppins text-charcoal mb-4 group-hover:text-burgundy transition-colors">
-                      {item.name}
-                    </h3>
-                    <p className="text-muted-foreground mb-10 leading-relaxed flex-1">
-                      {item.desc}
-                    </p>
-                    <div className="mt-auto">
-                      <Link href={item.link} target="_blank" rel="noopener noreferrer">
-                        <Button
-                          variant="outline"
-                          className="w-full h-14 rounded-2xl border-burgundy/10 text-burgundy font-black uppercase tracking-widest text-xs hover:bg-burgundy hover:text-white transition-all flex items-center justify-center gap-2">
-                          Get Started <ExternalLink className="w-4 h-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
 
           {/* Partner Highlight */}
           <motion.div

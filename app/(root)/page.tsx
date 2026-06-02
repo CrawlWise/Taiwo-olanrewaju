@@ -18,7 +18,8 @@ import {
   Heart,
   Activity,
   Plane,
-  Stethoscope
+  Stethoscope,
+  ExternalLink
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,6 +42,10 @@ const staggerContainer = {
   }
 };
 
+const AFFILIATES = [
+  { name: "WealthSimple", desc: "Join me on Wealthsimple and get $25 when you fund any account with my referral code H49DAD 🎁 T&Cs", logo: "WS", color: "burgundy", link: "https://my.wealthsimple.com/app/signup?is_retargeting=true&source_caller=ui&shortlink=3i2t30pp&c=referral-promocode-share-link-2023&pid=referral&af_xp=custom&af_reengagement_window=30d&referralcode=H49DAD" },
+  { name: "Insurely ", desc: "Compare and save an average of $428 a year* on Your Home Insurance", logo: "IS", color: "gold", link: "https://stan.store/FinanceWithTee " },
+];
 
 export default function Home() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
@@ -336,6 +341,47 @@ export default function Home() {
           {/*our partners */}
       <section>
             <Partners />
+      </section>
+
+      {/* Affiliate Links Section */}
+      <section className="py-12 bg-muted/30 border-t border-muted/20">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {AFFILIATES.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Card className="h-full border-none shadow-premium hover:shadow-2xl transition-all group rounded-3xl overflow-hidden bg-white">
+                  <CardContent className="p-6 md:p-8 flex flex-col h-full">
+                    <div className="w-12 h-12 rounded-xl bg-muted/30 flex items-center justify-center text-xl font-black font-poppins text-charcoal mb-5 group-hover:scale-110 group-hover:bg-burgundy group-hover:text-white transition-all duration-500">
+                      {item.logo}
+                    </div>
+                    <h3 className="text-xl font-bold font-poppins text-charcoal mb-2 group-hover:text-burgundy transition-colors">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed flex-1">
+                      {item.desc}
+                    </p>
+                    <div className="mt-auto">
+                      <Link href={item.link} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          className="w-full h-11 rounded-xl border-burgundy/10 text-burgundy font-black uppercase tracking-widest text-[10px] hover:bg-burgundy hover:text-white transition-all flex items-center justify-center gap-2"
+                        >
+                          Get Started <ExternalLink className="w-3.5 h-3.5" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* About Preview Section */}
