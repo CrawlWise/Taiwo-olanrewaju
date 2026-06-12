@@ -38,7 +38,7 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-6 font-poppins text-gold">Resources</h3>
             <ul className="space-y-4 text-white/70">
               <li><Link href="/books" className="hover:text-gold transition-colors">Books & Guides</Link></li>
-              {/* <li><Link href="/affiliates" className="hover:text-gold transition-colors">Partner Links</Link></li> */}
+              <li><Link href="/affiliates" className="hover:text-gold transition-colors">Partner Links</Link></li>
               <li><Link href="/newsletter" className="hover:text-gold transition-colors">Weekly Newsletter</Link></li>
             </ul>
           </div>

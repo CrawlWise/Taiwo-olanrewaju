@@ -5,16 +5,12 @@ import {
   Mail, 
   Phone, 
   MapPin, 
-  MessageSquare, 
-  ArrowRight,
   ShieldCheck,
-  Globe,
+
   Clock
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import ContactForm  from "@/components/forms/contactForm";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -47,7 +43,7 @@ export default function ContactPage() {
           >
             <Badge  className="mb-6">Contact Us</Badge>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight font-poppins mb-8 leading-[1.1]">
-              Let's Start a <br />
+              Let&apos;s Start a <br />
               <span className="text-gradient-gold">Conversation.</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/70 font-inter max-w-2xl mx-auto leading-relaxed">
@@ -107,61 +103,7 @@ export default function ContactPage() {
             </motion.div>
 
             {/* Form Side */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="lg:col-span-3"
-            >
-              <Card className="border-none shadow-premium rounded-[48px] overflow-hidden bg-white">
-                <CardContent className="p-10 md:p-16">
-                  <div className="flex items-center gap-4 mb-10">
-                    <div className="w-12 h-12 rounded-2xl bg-burgundy/5 text-burgundy flex items-center justify-center">
-                      <MessageSquare className="w-6 h-6" />
-                    </div>
-                    <h2 className="text-3xl font-bold font-poppins text-charcoal">Send a Message</h2>
-                  </div>
-
-                  <form className="space-y-8">
-                    <div className="grid sm:grid-cols-2 gap-8">
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Full Name *</label>
-                        <Input required placeholder="Taiwo Olanrewaju" className="h-14 rounded-2xl bg-muted/20 border-none focus:ring-burgundy" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Email Address *</label>
-                        <Input type="email" required placeholder="hello@taiwo.com" className="h-14 rounded-2xl bg-muted/20 border-none focus:ring-burgundy" />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Inquiry Subject *</label>
-                      <select className="flex h-14 w-full rounded-2xl border-none bg-muted/20 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-burgundy">
-                        <option value="">Select a subject...</option>
-                        <option value="advisory">Financial Advisory</option>
-                        <option value="speaking">Speaking Engagement</option>
-                        <option value="book">Book Inquiry</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Your Message *</label>
-                      <textarea className="w-full px-5 py-4 rounded-3xl border-none bg-muted/20 focus:outline-none focus:ring-2 focus:ring-burgundy min-h-[160px]" placeholder="How can we assist you today?"></textarea>
-                    </div>
-
-                    <div className="pt-4">
-                      <Button className="w-full h-16 text-xl font-bold font-poppins bg-burgundy hover:bg-burgundy-dark text-white rounded-2xl shadow-xl transition-all transform hover:scale-[1.02] active:scale-[0.98]">
-                        Send Message <ArrowRight className="ml-3 w-6 h-6" />
-                      </Button>
-                      <p className="text-[10px] text-center text-muted-foreground mt-8 uppercase tracking-[0.2em] font-bold">
-                        We respect your privacy. Your data is encrypted.
-                      </p>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </motion.div>
+            <ContactForm />
           </div>
         </div>
       </section>

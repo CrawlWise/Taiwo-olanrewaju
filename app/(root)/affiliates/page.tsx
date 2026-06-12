@@ -8,16 +8,22 @@ import {
   Zap,
   Layers,
   Heart,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { AFFILIATES } from "@/site-data/affiliates";
+import Image from "next/image";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.6 }
 };
+
+
 
 export default function AffiliatesPage() {
   return (
@@ -55,6 +61,47 @@ export default function AffiliatesPage() {
             </p>
           </div>
 
+          {/* Affiliate Links Section */}
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-20">
+            {AFFILIATES.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Card className="h-full border-none shadow-premium hover:shadow-2xl transition-all group rounded-3xl overflow-hidden bg-white">
+                  <CardContent className="p-6 md:p-8 flex flex-col h-full">
+                    <div className="h-16 rounded-xl bg-muted/30 flex items-center justify-center text-xl font-black font-poppins text-charcoal mb-5 group-hover:scale-110 group-hover:bg-burgundy group-hover:text-white transition-all duration-500 overflow-hidden">
+                      {item.img ? (
+                        <Image src={item.img} alt={item.logo} width={150} height={150} className="w-full h-full object-cover rounded-xl" />
+                      ) : (
+                        item.name.trim().charAt(0)
+                      )}
+                    </div>
+                    <h3 className="text-xl font-bold font-poppins text-charcoal mb-2 group-hover:text-burgundy transition-colors">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed flex-1">
+                      {item.desc}
+                    </p>
+                    <div className="mt-auto">
+                      <Link href={item.link} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="outline"
+                          className="w-full h-11 rounded-xl border-burgundy/10 text-burgundy font-black uppercase tracking-widest text-[10px] hover:bg-burgundy hover:text-white transition-all flex items-center justify-center gap-2"
+                        >
+                          Get Started <ExternalLink className="w-3.5 h-3.5" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
 
           {/* Partner Highlight */}
           <motion.div
@@ -71,9 +118,12 @@ export default function AffiliatesPage() {
                 <p className="text-lg text-white/70 mb-10 max-w-xl">
                   Are you a service provider interested in collaborating? We are always looking for partners who align with our mission of financial empowerment.
                 </p>
-                <Button className="h-14 px-8 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl">
-                  Contact Partnerships <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+          
+                <Link href="/careers">
+                  <Button className="h-14 px-8 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl">
+                    Contact Partnerships <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
               </div>
               <div className="grid grid-cols-2 gap-6 opacity-30">
                 {[Zap, Layers, ShieldCheck, Wrench].map((Icon, i) => (

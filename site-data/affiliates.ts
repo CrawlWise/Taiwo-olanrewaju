@@ -1,0 +1,5 @@
+export const AFFILIATES = [
+  { name: "WealthSimple", desc: "Join me on Wealthsimple and get $25 when you fund any account with my referral code H49DAD 🎁 T&Cs", logo: "WS", img: "/images/wealthsimple.png", color: "burgundy", link: "https://my.wealthsimple.com/app/signup?is_retargeting=true&source_caller=ui&shortlink=3i2t30pp&c=referral-promocode-share-link-2023&pid=referral&af_xp=custom&af_reengagement_window=30d&referralcode=H49DAD" },
+  { name: "Insurely ", desc: "Compare and save an average of $428 a year* on Your Home Insurance", logo: "IS", img: "/images/insurely.png", color: "gold", link: "https://stan.store/FinanceWithTee " },
+  { name: "CreditLift ", desc: "Compare and save an average of $428 a year* on Your Home Insurance", logo: "CL", img: "/images/creditlift.png", color: "gold", link: "https://stan.store/FinanceWithTee " },
+];
