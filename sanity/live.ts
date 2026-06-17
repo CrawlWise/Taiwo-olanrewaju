@@ -1,6 +1,5 @@
-import { defineLive } from "next-sanity/live";
-import { client } from "@/sanity/client";
+import { client } from "./client";
 
-export const { sanityFetch, SanityLive } = defineLive({
-  client
-});
+export async function sanityFetch(query: string) {
+  return client.fetch(query, {}, { cache: "no-store" });
+}

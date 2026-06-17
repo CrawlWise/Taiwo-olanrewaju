@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Script from "next/script";
 import {
   ArrowRight,
   BookOpen,
@@ -19,30 +20,28 @@ import {
   Activity,
   Plane,
   Stethoscope,
-  Download
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { client } from "@/sanity/client";
 import { LATEST_POSTS_QUERY, ALL_BOOKS_QUERY } from "@/sanity/queries";
-import  Partners  from "@/components/partners/partners";
+import Partners from "@/components/partners/partners";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 }
+  transition: { duration: 0.6 },
 };
 
 const staggerContainer = {
   animate: {
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 };
-
-
 
 export default function Home() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
@@ -54,10 +53,10 @@ export default function Home() {
       try {
         const [posts, stores] = await Promise.all([
           client.fetch(LATEST_POSTS_QUERY),
-          client.fetch(ALL_BOOKS_QUERY)
+          client.fetch(ALL_BOOKS_QUERY),
         ]);
         setBlogPosts(posts || []);
-        
+
         let foundFreeBook = null;
         stores?.forEach((store: any) => {
           if (store.tier === "free" && store.books?.length > 0) {
@@ -108,7 +107,7 @@ export default function Home() {
           <motion.div
             animate={{
               scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3]
+              opacity: [0.3, 0.5, 0.3],
             }}
             transition={{ duration: 10, repeat: Infinity }}
             className="absolute -top-24 -left-24 w-96 h-96 bg-gold/20 rounded-full blur-[100px]"
@@ -116,7 +115,7 @@ export default function Home() {
           <motion.div
             animate={{
               scale: [1, 1.3, 1],
-              opacity: [0.2, 0.4, 0.2]
+              opacity: [0.2, 0.4, 0.2],
             }}
             transition={{ duration: 15, repeat: Infinity, delay: 2 }}
             className="absolute -bottom-24 -right-24 w-[500px] h-[500px] bg-burgundy-light/30 rounded-full blur-[120px]"
@@ -149,10 +148,15 @@ export default function Home() {
                 variants={fadeIn}
                 className="text-lg md:text-xl text-white/80 mb-10 font-inter max-w-xl leading-relaxed"
               >
-                Secure your future with professional financial guidance. I help individuals and entrepreneurs navigate the complexities of wealth building and legacy planning.
+                Secure your future with professional financial guidance. I help
+                individuals and entrepreneurs navigate the complexities of
+                wealth building and legacy planning.
               </motion.p>
 
-              <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-5">
+              <motion.div
+                variants={fadeIn}
+                className="flex flex-col sm:flex-row gap-5"
+              >
                 <Button
                   asChild
                   size="lg"
@@ -168,9 +172,7 @@ export default function Home() {
                   size="lg"
                   className="border-white/30 hover:bg-white/10 text-white font-semibold text-lg h-14 px-8 backdrop-blur-sm"
                 >
-                  <Link href="/books">
-                    Get My Free Book
-                  </Link>
+                  <Link href="/books">Get My Free Book</Link>
                 </Button>
               </motion.div>
 
@@ -179,13 +181,18 @@ export default function Home() {
                 className="mt-12 flex items-center gap-4 text-white/60"
               >
                 <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="w-10 h-10 rounded-full border-2 border-burgundy bg-charcoal flex items-center justify-center text-[10px] font-bold">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className="w-10 h-10 rounded-full border-2 border-burgundy bg-charcoal flex items-center justify-center text-[10px] font-bold"
+                    >
                       {i}+
                     </div>
                   ))}
                 </div>
-                <p className="text-sm font-medium">Trusted by 500+ clients across Canada</p>
+                <p className="text-sm font-medium">
+                  Trusted by 500+ clients across Canada
+                </p>
               </motion.div>
             </motion.div>
 
@@ -209,7 +216,11 @@ export default function Home() {
               {/* Floating Card */}
               <motion.div
                 animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="absolute -bottom-8 -left-8 glass p-6 rounded-2xl shadow-premium border-gold/20 max-w-[240px] hidden md:block"
               >
                 <div className="flex items-center gap-3 mb-3">
@@ -217,11 +228,17 @@ export default function Home() {
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gold uppercase tracking-tighter">Verified Expert</p>
-                    <p className="text-sm font-bold text-white">Licensed Advisor</p>
+                    <p className="text-xs font-bold text-gold uppercase tracking-tighter">
+                      Verified Expert
+                    </p>
+                    <p className="text-sm font-bold text-white">
+                      Licensed Advisor
+                    </p>
                   </div>
                 </div>
-                <p className="text-xs text-white/70">Providing strategic financial solutions for over a decade.</p>
+                <p className="text-xs text-white/70">
+                  Providing strategic financial solutions for over a decade.
+                </p>
               </motion.div>
             </motion.div>
           </div>
@@ -246,8 +263,12 @@ export default function Home() {
                 className="flex flex-col items-center text-center p-4 min-w-[200px]"
               >
                 <stat.icon className="w-8 h-8 text-gold mb-3 opacity-80" />
-                <h3 className="text-3xl md:text-4xl font-bold font-poppins text-white mb-1">{stat.value}</h3>
-                <p className="text-sm text-white/60 font-medium uppercase tracking-wider">{stat.label}</p>
+                <h3 className="text-3xl md:text-4xl font-bold font-poppins text-white mb-1">
+                  {stat.value}
+                </h3>
+                <p className="text-sm text-white/60 font-medium uppercase tracking-wider">
+                  {stat.label}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -259,10 +280,13 @@ export default function Home() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-20">
             <Badge className="mb-4">Our Expertise</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal mb-6">Strategic Financial Solutions</h2>
+            <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal mb-6">
+              Strategic Financial Solutions
+            </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              I provide expert insurance guidance tailored to your unique needs. 
-              My goal is to help you secure the right coverage for your financial future.
+              I provide expert insurance guidance tailored to your unique needs.
+              My goal is to help you secure the right coverage for your
+              financial future.
             </p>
           </div>
 
@@ -271,58 +295,63 @@ export default function Home() {
               {
                 title: "Life Insurance",
                 icon: Heart,
-                color: "burgundy"
+                color: "burgundy",
               },
               {
                 title: "Critical Illness Insurance",
                 icon: Activity,
-                color: "gold"
+                color: "gold",
               },
               {
-                title: "Registered & Non Registered Investment Accounts (TFSA, RRSP, RESP, FHSA, Annuities)",
+                title:
+                  "Registered & Non Registered Investment Accounts (TFSA, RRSP, RESP, FHSA, Annuities)",
                 icon: TrendingUp,
-                color: "charcoal"
-              }, 
+                color: "charcoal",
+              },
               {
                 title: "Travel Insurance / Super Visa Insurance",
                 icon: Plane,
-                color: "charcoal"
-              }, 
+                color: "charcoal",
+              },
               {
                 title: "Health & Dental",
                 icon: Stethoscope,
-                color: "charcoal"
-              }, 
+                color: "charcoal",
+              },
               {
                 title: "Income Replacement Insurance",
                 icon: Briefcase,
-                color: "charcoal"
-              }, 
+                color: "charcoal",
+              },
               {
                 title: "Group Policies & Disability Insurance",
                 icon: Users,
-                color: "charcoal"
-              }, 
+                color: "charcoal",
+              },
             ].map((service, i) => {
               // Map colors statically for our new minimalist look
               const colorMap = {
                 burgundy: {
                   icon: "text-burgundy bg-burgundy/10 group-hover:bg-burgundy group-hover:text-white",
-                  cardHover: "hover:border-burgundy/20 hover:bg-burgundy/[0.02]",
-                  chevron: "group-hover:text-burgundy"
+                  cardHover:
+                    "hover:border-burgundy/20 hover:bg-burgundy/[0.02]",
+                  chevron: "group-hover:text-burgundy",
                 },
                 gold: {
                   icon: "text-gold-dark bg-gold/15 group-hover:bg-gold group-hover:text-burgundy-dark",
                   cardHover: "hover:border-gold/30 hover:bg-gold/[0.03]",
-                  chevron: "group-hover:text-gold-dark"
+                  chevron: "group-hover:text-gold-dark",
                 },
                 charcoal: {
                   icon: "text-charcoal bg-charcoal/10 group-hover:bg-charcoal group-hover:text-white",
-                  cardHover: "hover:border-charcoal/20 hover:bg-charcoal/[0.02]",
-                  chevron: "group-hover:text-charcoal"
-                }
+                  cardHover:
+                    "hover:border-charcoal/20 hover:bg-charcoal/[0.02]",
+                  chevron: "group-hover:text-charcoal",
+                },
               };
-              const styles = colorMap[service.color as keyof typeof colorMap] || colorMap.charcoal;
+              const styles =
+                colorMap[service.color as keyof typeof colorMap] ||
+                colorMap.charcoal;
 
               return (
                 <motion.div
@@ -333,22 +362,28 @@ export default function Home() {
                   transition={{ delay: i * 0.05, duration: 0.5 }}
                   className="h-full"
                 >
-                  <Card className={`relative h-full bg-white p-6 md:p-7 rounded-2xl transition-all duration-300 ease-out group overflow-hidden ${styles.cardHover} hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.04)]`}>
+                  <Card
+                    className={`relative h-full bg-white p-6 md:p-7 rounded-2xl transition-all duration-300 ease-out group overflow-hidden ${styles.cardHover} hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.04)]`}
+                  >
                     <div className="relative z-10 flex items-center justify-between gap-4">
                       <div className="flex items-center gap-5">
                         {/* Elegant Icon Container */}
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ease-out shrink-0 ${styles.icon}`}>
+                        <div
+                          className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ease-out shrink-0 ${styles.icon}`}
+                        >
                           <service.icon className="w-6 h-6" />
                         </div>
-                        
+
                         {/* Title - Non-bold (font-medium) */}
                         <h3 className="text-base md:text-lg font-medium font-poppins text-charcoal transition-colors duration-300 leading-snug">
                           {service.title}
                         </h3>
                       </div>
-                      
+
                       {/* Premium Hover Arrow Indicator */}
-                      <ArrowRight className={`w-4 h-4 text-muted-foreground/60 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out shrink-0 ${styles.chevron}`} />
+                      <ArrowRight
+                        className={`w-4 h-4 text-muted-foreground/60 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out shrink-0 ${styles.chevron}`}
+                      />
                     </div>
                   </Card>
                 </motion.div>
@@ -358,12 +393,10 @@ export default function Home() {
         </div>
       </section>
 
-          {/*our partners */}
+      {/*our partners */}
       <section>
-            <Partners />
+        <Partners />
       </section>
-
-
 
       {/* About Preview Section */}
       <section className="py-24 bg-warm-beige/30">
@@ -385,22 +418,36 @@ export default function Home() {
 
             <div className="lg:w-1/2">
               <Badge className="mb-6">The Story</Badge>
-              <h2 className="text-4xl font-bold font-poppins text-charcoal mb-8 leading-tight">Driven by Purpose, <br />Focused on Your Progress.</h2>
+              <h2 className="text-4xl font-bold font-poppins text-charcoal mb-8 leading-tight">
+                Driven by Purpose, <br />
+                Focused on Your Progress.
+              </h2>
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed italic">
                 <p>
-                  "Financial freedom isn't just about how much money you make; it's about the security and legacy you create for those you love."
+                  &quot;Financial freedom isn&apos;t just about how much money
+                  you make; it&apos;s about the security and legacy you create
+                  for those you love.&quot;
                 </p>
                 <div className="not-italic text-charcoal space-y-4">
                   <p>
-                    With over a decade of experience, I've seen firsthand how the right financial strategy can transform lives. My mission is to simplify the complex and provide a clear roadmap to prosperity.
+                    With over a decade of experience, I&lsquo;ve seen firsthand
+                    how the right financial strategy can transform lives. My
+                    mission is to simplify the complex and provide a clear
+                    roadmap to prosperity.
                   </p>
                   <p>
-                    Whether you're just starting your career or looking to optimize your wealth, I'm here to guide you every step of the way.
+                    Whether you&apos;re just starting your career or looking to
+                    optimize your wealth, I&apos;m here to guide you every step
+                    of the way.
                   </p>
                 </div>
               </div>
               <div className="mt-10">
-                <Button asChild variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white rounded-full px-8">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white rounded-full px-8"
+                >
                   <Link href="/about">Read My Full Story</Link>
                 </Button>
               </div>
@@ -416,15 +463,26 @@ export default function Home() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-16 bg-white/5 backdrop-blur-sm rounded-[40px] p-12 lg:p-20 border border-white/10 shadow-2xl">
             <div className="lg:w-1/2">
-              <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">Start Your Journey to Legacy.</h2>
+              <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">
+                Start Your Journey to Legacy.
+              </h2>
               <p className="text-xl text-white/80 mb-10 leading-relaxed">
                 {freeBook ? (
                   <>
-                    Download my exclusive guide: <span className="text-gold font-bold">"{freeBook.title}"</span>.
+                    Download my exclusive guide:{" "}
+                    <span className="text-gold font-bold">
+                      &quot;{freeBook.title}&quot;
+                    </span>
+                    .
                   </>
                 ) : (
                   <>
-                    Download my exclusive guide: <span className="text-gold font-bold">"The Legacy Roadmap"</span>. Learn the 5 essential pillars of wealth building that traditional banks won't tell you.
+                    Download my exclusive guide:{" "}
+                    <span className="text-gold font-bold">
+                      &quot;The Legacy Roadmap&quot;
+                    </span>
+                    . Learn the 5 essential pillars of wealth building that
+                    traditional banks won&apos;t tell you.
                   </>
                 )}
               </p>
@@ -440,7 +498,7 @@ export default function Home() {
                   "Proven wealth preservation strategies",
                   "How to minimize taxes legally",
                   "Building multi-generational wealth",
-                  "Investment basics for newcomers"
+                  "Investment basics for newcomers",
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-white/90">
                     <CheckCircle2 className="w-5 h-5 text-gold" />
@@ -450,19 +508,40 @@ export default function Home() {
               </ul>
 
               {freeBook ? (
-                <form onSubmit={handleDownload} className="space-y-4 bg-white/10 p-6 rounded-3xl border border-white/10 w-full max-w-md backdrop-blur-md">
+                <form
+                  onSubmit={handleDownload}
+                  className="space-y-4 bg-white/10 p-6 rounded-3xl border border-white/10 w-full max-w-md backdrop-blur-md"
+                >
                   <div className="grid sm:grid-cols-2 gap-3">
-                    <input required placeholder="Your Name" className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm" />
-                    <input type="email" required placeholder="Email Address" className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm" />
+                    <input
+                      required
+                      placeholder="Your Name"
+                      className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm"
+                    />
+                    <input
+                      type="email"
+                      required
+                      placeholder="Email Address"
+                      className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm"
+                    />
                   </div>
-                  <Button type="submit" className="w-full h-12 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-gold">
+                  <Button
+                    type="submit"
+                    className="w-full h-12 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-gold"
+                  >
                     Send My eBook <Download className="w-4 h-4" />
                   </Button>
-                  <p className="text-[10px] text-center text-white/50 uppercase tracking-widest font-bold">Sent instantly to your inbox / Direct Download</p>
+                  <p className="text-[10px] text-center text-white/50 uppercase tracking-widest font-bold">
+                    Sent instantly to your inbox / Direct Download
+                  </p>
                 </form>
               ) : (
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button asChild size="lg" className="bg-gold hover:bg-gold-light text-burgundy-dark font-bold h-14 px-10 rounded-xl">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-gold hover:bg-gold-light text-burgundy-dark font-bold h-14 px-10 rounded-xl"
+                  >
                     <Link href="/books">Download Free Guide</Link>
                   </Button>
                 </div>
@@ -476,8 +555,14 @@ export default function Home() {
                 className="relative shadow-[20px_20px_60px_rgba(0,0,0,0.5)] rounded-lg overflow-hidden"
               >
                 <Image
-                  src={freeBook?.coverImage?.asset?.url || "/images/book_cover.png"}
-                  alt={freeBook?.coverImageAlt || freeBook?.title || "The Legacy Roadmap Book"}
+                  src={
+                    freeBook?.coverImage?.asset?.url || "/images/book_cover.png"
+                  }
+                  alt={
+                    freeBook?.coverImageAlt ||
+                    freeBook?.title ||
+                    "The Legacy Roadmap Book"
+                  }
                   width={350}
                   height={500}
                   className="rounded-lg object-cover"
@@ -493,9 +578,13 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center mb-16">
             <Badge className="mb-4">Join My Team</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal mb-6 italic">Empower Others, Grow Your Career.</h2>
+            <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal mb-6 italic">
+              Empower Others, Grow Your Career.
+            </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              I am looking for ambitious individuals who want to build a rewarding career as financial advisors. Join a community that values growth, integrity, and impact.
+              I am looking for ambitious individuals who want to build a
+              rewarding career as financial advisors. Join a community that
+              values growth, integrity, and impact.
             </p>
           </div>
 
@@ -503,13 +592,15 @@ export default function Home() {
             <Card className="border-none bg-charcoal text-white p-10 rounded-3xl shadow-premium">
               <div className="h-full flex flex-col">
                 <Users className="w-12 h-12 text-gold mb-6" />
-                <h3 className="text-2xl font-bold font-poppins mb-4">Why Join Us?</h3>
+                <h3 className="text-2xl font-bold font-poppins mb-4">
+                  Why Join Us?
+                </h3>
                 <div className="space-y-4 flex-grow">
                   {[
                     "Unmatched mentorship and training",
                     "Flexible hours and remote work options",
                     "Performance-based high income potential",
-                    "Meaningful work that changes lives"
+                    "Meaningful work that changes lives",
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gold" />
@@ -518,7 +609,10 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="mt-10">
-                  <Button asChild className="w-full bg-white text-charcoal hover:bg-gold hover:text-burgundy-dark font-bold py-6">
+                  <Button
+                    asChild
+                    className="w-full bg-white text-charcoal hover:bg-gold hover:text-burgundy-dark font-bold py-6"
+                  >
                     <Link href="/careers#benefits">Apply Now</Link>
                   </Button>
                 </div>
@@ -534,8 +628,13 @@ export default function Home() {
               />
               <div className="absolute inset-0 bg-burgundy/40 flex items-center justify-center p-12">
                 <div className="text-center">
-                  <h3 className="text-3xl font-bold text-white mb-4">Your Success is My Priority.</h3>
-                  <p className="text-white/90">I personally mentor every member of my team to ensure they reach their full potential.</p>
+                  <h3 className="text-3xl font-bold text-white mb-4">
+                    Your Success is My Priority.
+                  </h3>
+                  <p className="text-white/90">
+                    I personally mentor every member of my team to ensure they
+                    reach their full potential.
+                  </p>
                 </div>
               </div>
             </div>
@@ -543,56 +642,33 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Preview */}
+      {/* Testimonials */}
       <section className="py-24 bg-charcoal text-white relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold font-poppins mb-4">Client Success Stories</h2>
+            <h2 className="text-4xl font-bold font-poppins mb-4">
+              Client Success Stories
+            </h2>
             <div className="w-20 h-1 bg-gold mx-auto" />
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
-            {[
-              {
-                text: "Taiwo didn't just give me financial advice; he gave me a new perspective on how to build a legacy for my children. His approach is professional yet deeply personal.",
-                author: "Sarah J.",
-                role: "Entrepreneur"
-              },
-              {
-                text: "Working with Taiwo has been the best investment I've made for my future. The clarity and confidence I have now regarding my retirement plan is priceless.",
-                author: "Michael O.",
-                role: "Corporate Executive"
-              }
-            ].map((testimonial, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="bg-white/5 p-10 rounded-3xl border border-white/10 relative"
-              >
-                <Quote className="absolute top-10 right-10 w-12 h-12 text-gold/20" />
-                <p className="text-xl italic text-white/90 mb-8 leading-relaxed">
-                  "{testimonial.text}"
-                </p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-burgundy-dark font-bold">
-                    {testimonial.author[0]}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">{testimonial.author}</h4>
-                    <p className="text-gold text-sm font-medium">{testimonial.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <Script
+            src="https://elfsightcdn.com/platform.js"
+            strategy="lazyOnload"
+          />
 
-          <div className="mt-16 text-center">
-            <Link href="/reviews" className="text-gold hover:text-white transition-colors font-bold underline underline-offset-8">
-              See All Client Stories
-            </Link>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-6xl mx-auto"
+          >
+            <div
+              className="elfsight-app-b2236910-2b35-48be-8779-1560be1b8e1b"
+              data-elfsight-app-lazy
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -622,9 +698,12 @@ export default function Home() {
           ) : !blogPosts || blogPosts.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground border border-dashed rounded-3xl p-8 bg-warm-beige/5">
               <BookOpen className="w-12 h-12 text-gold mx-auto mb-4 opacity-65 animate-pulse" />
-              <p className="text-lg font-medium mb-1">No articles published yet</p>
+              <p className="text-lg font-medium mb-1">
+                No articles published yet
+              </p>
               <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                Articles are being prepared. Check back soon for industry insights and career strategies.
+                Articles are being prepared. Check back soon for industry
+                insights and career strategies.
               </p>
             </div>
           ) : (
@@ -634,7 +713,7 @@ export default function Home() {
                   const imageUrl = post.mainImage?.asset?.url
                     ? `${post.mainImage.asset.url}?w=600&h=400&fit=crop&auto=format`
                     : null;
-                  
+
                   return (
                     <motion.div
                       key={post._id}
@@ -649,7 +728,11 @@ export default function Home() {
                           {imageUrl ? (
                             <Image
                               src={imageUrl}
-                              alt={post.mainImage?.alt ?? post.title ?? "Blog Cover"}
+                              alt={
+                                post.mainImage?.alt ??
+                                post.title ??
+                                "Blog Cover"
+                              }
                               fill
                               sizes="(max-w-768px) 100vw, 33vw"
                               className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -697,7 +780,8 @@ export default function Home() {
                               href={`/blog/${post.slug?.current ?? ""}`}
                               className="inline-flex items-center font-bold text-burgundy group-hover:gap-2 transition-all"
                             >
-                              Read Article <ArrowRight className="ml-1 w-4 h-4" />
+                              Read Article{" "}
+                              <ArrowRight className="ml-1 w-4 h-4" />
                             </Link>
                           </div>
                         </CardContent>
@@ -727,18 +811,29 @@ export default function Home() {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal mb-8 leading-tight">
-            Ready to Take the Next Step <br className="hidden md:block" /> Toward Financial Freedom?
+            Ready to Take the Next Step <br className="hidden md:block" />{" "}
+            Toward Financial Freedom?
           </h2>
           <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Don't wait for the "perfect" time. Start building your wealth today with a personalized consultation.
+            Don't wait for the "perfect" time. Start building your wealth today
+            with a personalized consultation.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <Button asChild size="lg" className="bg-burgundy hover:bg-burgundy-dark text-white font-bold h-16 px-10 rounded-full text-xl shadow-xl">
+            <Button
+              asChild
+              size="lg"
+              className="bg-burgundy hover:bg-burgundy-dark text-white font-bold h-16 px-10 rounded-full text-xl shadow-xl"
+            >
               <Link href="/book">
                 <Calendar className="mr-3 h-6 w-6" /> Schedule a Call
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="border-burgundy text-burgundy hover:bg-burgundy/5 font-bold h-16 px-10 rounded-full text-xl">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-burgundy text-burgundy hover:bg-burgundy/5 font-bold h-16 px-10 rounded-full text-xl"
+            >
               <Link href="/contact">Contact Me Directly</Link>
             </Button>
           </div>
