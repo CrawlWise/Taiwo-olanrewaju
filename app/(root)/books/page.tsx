@@ -1,46 +1,17 @@
 import { sanityFetch } from "@/sanity/live";
 import { ALL_BOOKS_QUERY } from "@/sanity/queries";
-import BooksClient, { Book } from "./BooksClient";
+import BooksClient from "./BooksClient";
 import type { Metadata } from "next";
+import type { Book } from "./BooksClient"; // adjust path if needed
 
 export const metadata: Metadata = {
   title: "Books & Guides | Taiwo Olanrewaju",
-  description: "Comprehensive blueprints, financial guides, and resources designed to build long-term wealth.",
+  description:
+    "Comprehensive blueprints, financial guides, and resources designed to build long-term wealth.",
 };
 
 export default async function BooksPage() {
-  // Fetch stores and their books from Sanity
-  const { data: stores } = (await sanityFetch({ query: ALL_BOOKS_QUERY })) as { data: any[] };
+  const books = await sanityFetch<Book[]>(ALL_BOOKS_QUERY);
 
-  // Group books by store tier
-  const freeBooks: Book[] = [];
-  const paidBooks: Book[] = [];
-
-  stores?.forEach((store: any) => {
-    const tier = store.tier;
-    store.books?.forEach((book: any) => {
-      const bookWithTier: Book = {
-        title: book.title,
-        summary: book.summary,
-        price: book.price,
-        isbn: book.isbn,
-        publishedDate: book.publishedDate,
-        coverImage: book.coverImage,
-        coverImageAlt: book.coverImageAlt,
-        author: book.author,
-        categories: book.categories,
-        fileUrl: book.fileUrl,
-        storeTier: tier,
-        paymentLink: book.paymentLink,
-      };
-
-      if (tier === "free") {
-        freeBooks.push(bookWithTier);
-      } else if (tier === "paid" || tier === "premium") {
-        paidBooks.push(bookWithTier);
-      }
-    });
-  });
-
-  return <BooksClient freeBooks={freeBooks} paidBooks={paidBooks} />;
+  return <BooksClient books={books} />;
 }
