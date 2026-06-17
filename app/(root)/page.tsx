@@ -26,7 +26,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { client } from "@/sanity/client";
 import { LATEST_POSTS_QUERY, ALL_BOOKS_QUERY } from "@/sanity/queries";
-import  Partners  from "@/components/partners/partners";
+import Partners from "@/components/partners/partners";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -49,6 +49,10 @@ export default function Home() {
   const [freeBook, setFreeBook] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const [downloadName, setDownloadName] = useState("");
+  const [downloadEmail, setDownloadEmail] = useState("");
+  const [downloadPhone, setDownloadPhone] = useState("");
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -57,7 +61,7 @@ export default function Home() {
           client.fetch(ALL_BOOKS_QUERY)
         ]);
         setBlogPosts(posts || []);
-        
+
         let foundFreeBook = null;
         stores?.forEach((store: any) => {
           if (store.tier === "free" && store.books?.length > 0) {
@@ -76,12 +80,39 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const handleDownload = (e: React.FormEvent) => {
+  const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (freeBook?.fileUrl) {
-      window.open(freeBook.fileUrl, "_blank");
-    } else {
-      alert("This book PDF is currently being prepared. Check back soon!");
+
+    try {
+      const response = await fetch("/api/download", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: downloadName,
+          email: downloadEmail,
+          phone: downloadPhone,
+          bookTitle: freeBook?.title || "Free Legacy Roadmap Guide",
+        }),
+      });
+
+      if (response.ok) {
+        if (freeBook?.fileUrl) {
+          window.open(freeBook.fileUrl, "_blank");
+        } else {
+          alert("This book PDF is currently being prepared. Check back soon!");
+        }
+        setDownloadName("");
+        setDownloadEmail("");
+        setDownloadPhone("");
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to process download request. Please try again.");
+      }
+    } catch (error) {
+      console.error("Failed to submit download notification:", error);
+      alert("Network error. Please check your connection and try again.");
     }
   };
 
@@ -173,20 +204,6 @@ export default function Home() {
                   </Link>
                 </Button>
               </motion.div>
-
-              <motion.div
-                variants={fadeIn}
-                className="mt-12 flex items-center gap-4 text-white/60"
-              >
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="w-10 h-10 rounded-full border-2 border-burgundy bg-charcoal flex items-center justify-center text-[10px] font-bold">
-                      {i}+
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm font-medium">Trusted by 500+ clients across Canada</p>
-              </motion.div>
             </motion.div>
 
             <motion.div
@@ -195,12 +212,12 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-8 border-white/5 group bg-black/10 pt-12">
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-8 border-white/5 group bg-black/10">
                 <Image
-                  src="/images/taiwo-nb.png"
+                  src="/images/ceo.jpeg"
                   alt="Taiwo Olanrewaju"
                   fill
-                  className="object-contain object-bottom group-hover:scale-105 transition-transform duration-700"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-burgundy/60 via-transparent to-transparent pointer-events-none" />
@@ -261,7 +278,7 @@ export default function Home() {
             <Badge className="mb-4">Our Expertise</Badge>
             <h2 className="text-4xl md:text-5xl font-bold font-poppins text-charcoal mb-6">Strategic Financial Solutions</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              I provide expert insurance guidance tailored to your unique needs. 
+              I provide expert insurance guidance tailored to your unique needs.
               My goal is to help you secure the right coverage for your financial future.
             </p>
           </div>
@@ -282,27 +299,27 @@ export default function Home() {
                 title: "Registered & Non Registered Investment Accounts (TFSA, RRSP, RESP, FHSA, Annuities)",
                 icon: TrendingUp,
                 color: "charcoal"
-              }, 
+              },
               {
                 title: "Travel Insurance / Super Visa Insurance",
                 icon: Plane,
                 color: "charcoal"
-              }, 
+              },
               {
                 title: "Health & Dental",
                 icon: Stethoscope,
                 color: "charcoal"
-              }, 
+              },
               {
                 title: "Income Replacement Insurance",
                 icon: Briefcase,
                 color: "charcoal"
-              }, 
+              },
               {
                 title: "Group Policies & Disability Insurance",
                 icon: Users,
                 color: "charcoal"
-              }, 
+              },
             ].map((service, i) => {
               // Map colors statically for our new minimalist look
               const colorMap = {
@@ -340,13 +357,13 @@ export default function Home() {
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 ease-out shrink-0 ${styles.icon}`}>
                           <service.icon className="w-6 h-6" />
                         </div>
-                        
+
                         {/* Title - Non-bold (font-medium) */}
                         <h3 className="text-base md:text-lg font-medium font-poppins text-charcoal transition-colors duration-300 leading-snug">
                           {service.title}
                         </h3>
                       </div>
-                      
+
                       {/* Premium Hover Arrow Indicator */}
                       <ArrowRight className={`w-4 h-4 text-muted-foreground/60 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out shrink-0 ${styles.chevron}`} />
                     </div>
@@ -358,9 +375,9 @@ export default function Home() {
         </div>
       </section>
 
-          {/*our partners */}
+      {/*our partners */}
       <section>
-            <Partners />
+        <Partners />
       </section>
 
 
@@ -372,7 +389,7 @@ export default function Home() {
             <div className="lg:w-1/2 relative">
               <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/images/taiwo-nb.png"
+                  src="/images/ceo.jpeg"
                   alt="Taiwo Olanrewaju"
                   width={600}
                   height={700}
@@ -451,9 +468,30 @@ export default function Home() {
 
               {freeBook ? (
                 <form onSubmit={handleDownload} className="space-y-4 bg-white/10 p-6 rounded-3xl border border-white/10 w-full max-w-md backdrop-blur-md">
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    <input required placeholder="Your Name" className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm" />
-                    <input type="email" required placeholder="Email Address" className="h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm" />
+                  <div className="space-y-3">
+                    <input
+                      required
+                      value={downloadName}
+                      onChange={(e) => setDownloadName(e.target.value)}
+                      placeholder="Your Name"
+                      className="w-full h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm"
+                    />
+                    <input
+                      type="email"
+                      required
+                      value={downloadEmail}
+                      onChange={(e) => setDownloadEmail(e.target.value)}
+                      placeholder="Email Address"
+                      className="w-full h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm"
+                    />
+                    <input
+                      type="tel"
+                      required
+                      value={downloadPhone}
+                      onChange={(e) => setDownloadPhone(e.target.value)}
+                      placeholder="Phone Number"
+                      className="w-full h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm"
+                    />
                   </div>
                   <Button type="submit" className="w-full h-12 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-gold">
                     Send My eBook <Download className="w-4 h-4" />
@@ -518,7 +556,7 @@ export default function Home() {
                   ))}
                 </div>
                 <div className="mt-10">
-                  <Button asChild className="w-full bg-white text-charcoal hover:bg-gold hover:text-burgundy-dark font-bold py-6">
+                  <Button asChild className="w-full bg-white text-charcoal hover:bg-gold hover:text-white font-bold py-6">
                     <Link href="/careers#benefits">Apply Now</Link>
                   </Button>
                 </div>
@@ -527,7 +565,7 @@ export default function Home() {
 
             <div className="relative rounded-3xl overflow-hidden group">
               <Image
-                src="/images/taiwo-nb.png"
+                src="/images/ceo.jpeg"
                 alt="Mentorship Session"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -544,7 +582,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Preview */}
-      <section className="py-24 bg-charcoal text-white relative overflow-hidden">
+      {/* <section className="py-24 bg-charcoal text-white relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold font-poppins mb-4">Client Success Stories</h2>
@@ -594,7 +632,7 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Blog Preview Section */}
       <section className="py-24 bg-white relative overflow-hidden">
@@ -634,7 +672,7 @@ export default function Home() {
                   const imageUrl = post.mainImage?.asset?.url
                     ? `${post.mainImage.asset.url}?w=600&h=400&fit=crop&auto=format`
                     : null;
-                  
+
                   return (
                     <motion.div
                       key={post._id}

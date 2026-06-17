@@ -81,7 +81,7 @@ export default function AboutPage() {
             >
               <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border-8 border-burgundy/5">
                 <Image
-                  src="/images/taiwo-nb.png"
+                  src="/images/ceo.jpeg"
                   alt="Taiwo Olanrewaju"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -112,12 +112,12 @@ export default function AboutPage() {
                 <h2 className="text-3xl md:text-4xl font-bold text-charcoal font-poppins mb-6">A Mission Born from Observation</h2>
                 <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
                   <p>
-                    I am a licensed insurance advisor with experience in the financial services industry. For years, I have noticed a simple observation: the most powerful wealth building strategies were often reserved for the elite, while the majority were left with generic advice. I saw hardworking individuals, families, and entrepreneurs struggling to navigate a complex system that didn't seem designed for their success. 
+                    I am a licensed insurance advisor with experience in the financial services industry. For years, I have noticed a simple observation: the most powerful wealth building strategies were often reserved for the elite, while the majority were left with generic advice. I saw hardworking individuals, families, and entrepreneurs struggling to navigate a complex system that didn't seem designed for their success.
                   </p>
                   <p>
-                  I decided to change that. Today, I am licensed in ONTARIO, ALBERTA, NEW BRUNSWICK, AND QUEBEC. I'm more than just an advisor. I am an educator and a mentor. My goal is to equip you with the tools, knowledge, and confidence to build a legacy that lasts for generations.”
+                    I decided to change that. Today, I am licensed in ONTARIO, ALBERTA, NEW BRUNSWICK, AND QUEBEC. I'm more than just an advisor. I am an educator and a mentor. My goal is to equip you with the tools, knowledge, and confidence to build a legacy that lasts for generations.”
                   </p>
-                 
+
                 </div>
               </motion.div>
             </div>
@@ -162,7 +162,7 @@ export default function AboutPage() {
       {/* Expertise Section */}
       <section className="py-24 bg-charcoal text-white">
         <div className="container mx-auto px-4 text-center">
-          <Badge  className="mb-6">Global Impact</Badge>
+          <Badge className="mb-6">Global Impact</Badge>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-12">Educating the Next Generation</h2>
           <div className="grid md:grid-cols-3 gap-12">
             {[
@@ -196,7 +196,7 @@ export default function AboutPage() {
             <p className="text-lg text-white/80 mb-10">
               Let's map out a customized strategy that aligns with your values and long-term goals.
             </p>
-            <Button asChild size="lg" className="bg-gold hover:bg-gold-light text-burgundy-dark font-bold rounded-full px-10 h-16 text-xl">
+            <Button asChild size="lg" className="bg-gold hover:bg-gold-light text-white font-bold rounded-full px-10 h-16 text-xl">
               <Link href="/book">
                 Book a Consultation <ArrowRight className="ml-2" />
               </Link>

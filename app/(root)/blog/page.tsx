@@ -29,11 +29,25 @@ function formatDate(dateString: string) {
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function BlogPage() {
+interface PageProps {
+  searchParams: Promise<{ category?: string }>;
+}
+
+export default async function BlogPage({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
+  const activeCategory = resolvedSearchParams.category;
+
   const [{ data: posts }, { data: categories }] = (await Promise.all([
     sanityFetch({ query: ALL_POSTS_QUERY }),
     sanityFetch({ query: ALL_CATEGORIES_QUERY }),
   ])) as any[];
+
+  // Filter posts by selected category slug in memory
+  const filteredPosts = activeCategory
+    ? posts?.filter((post: any) =>
+        post.categories?.some((cat: any) => cat.slug?.current === activeCategory)
+      )
+    : posts;
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -113,26 +127,33 @@ export default async function BlogPage() {
             <span className="text-sm font-semibold text-muted-foreground mr-2 uppercase tracking-wider">
               Filter:
             </span>
-            <Link href="/blog" className="filter-pill active" id="filter-all">
+            <Link 
+              href="/blog" 
+              className={`filter-pill ${!activeCategory ? "active" : ""}`} 
+              id="filter-all"
+            >
               All Posts
             </Link>
-            {categories.map((cat: any) => (
-              <Link
-                key={cat._id}
-                href={`/blog?category=${cat.slug?.current ?? ""}`}
-                className="filter-pill"
-                id={`filter-${cat.slug?.current ?? cat._id}`}
-              >
-                {cat.title}
-              </Link>
-            ))}
+            {categories.map((cat: any) => {
+              const isCurrent = activeCategory === cat.slug?.current;
+              return (
+                <Link
+                  key={cat._id}
+                  href={`/blog?category=${cat.slug?.current ?? ""}`}
+                  className={`filter-pill ${isCurrent ? "active" : ""}`}
+                  id={`filter-${cat.slug?.current ?? cat._id}`}
+                >
+                  {cat.title}
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
 
       {/* ── POST GRID ─────────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-7xl px-6 py-12">
-        {!posts || posts.length === 0 ? (
+        {!filteredPosts || filteredPosts.length === 0 ? (
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-32 text-center gap-6">
             <div
@@ -141,15 +162,14 @@ export default async function BlogPage() {
             >
               <BookOpen size={36} className="text-primary opacity-60" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground">No posts yet</h2>
+            <h2 className="text-2xl font-bold text-foreground">No posts found</h2>
             <p className="text-muted-foreground max-w-md">
-              Articles are being prepared. Check back soon for insights and
-              thought leadership content.
+              There are no articles in this category yet. Check back soon or select another category.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post: any, i: number) => {
+            {filteredPosts.map((post: any, i: number) => {
               const imageUrl =
                 post.mainImage?.asset?.url
                   ? `${post.mainImage.asset.url}?w=800&h=500&fit=crop&auto=format`

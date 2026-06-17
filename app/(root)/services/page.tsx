@@ -81,7 +81,7 @@ export default function ServicesPage() {
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
-    
+
     if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     scrollTimeoutRef.current = setTimeout(() => {
       isScrollingRef.current = false;
@@ -128,7 +128,7 @@ export default function ServicesPage() {
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-12 items-start">
-            
+
             {/* Left Sticky Sidebar */}
             <aside className="w-full lg:w-72 shrink-0 sticky lg:top-28">
               <div className="bg-white rounded-3xl p-6 border border-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
@@ -142,11 +142,10 @@ export default function ServicesPage() {
                       <button
                         key={item.id}
                         onClick={() => scrollToSection(item.id)}
-                        className={`text-left py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 relative w-full ${
-                          isActive
+                        className={`text-left py-3 px-4 rounded-xl text-sm font-semibold transition-all duration-300 relative w-full ${isActive
                             ? "text-burgundy bg-burgundy/[0.08] pl-6 font-bold"
                             : "text-muted-foreground hover:text-burgundy hover:bg-black/[0.01]"
-                        }`}
+                          }`}
                       >
                         {/* Dynamic left indicator line */}
                         {isActive && (
@@ -230,9 +229,8 @@ export default function ServicesPage() {
                         {section.cards.map((card, cidx) => (
                           <Card
                             key={cidx}
-                            className={`border-none shadow-[0_8px_30px_rgb(0,0,0,0.015)] bg-white overflow-hidden rounded-2xl relative transition-all duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.03)] hover:-translate-y-0.5 border-l-4 ${
-                              cidx % 2 === 0 ? "border-l-gold" : "border-l-burgundy"
-                            }`}
+                            className={`border-none shadow-[0_8px_30px_rgb(0,0,0,0.015)] bg-white overflow-hidden rounded-2xl relative transition-all duration-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.03)] hover:-translate-y-0.5 border-l-4 ${cidx % 2 === 0 ? "border-l-gold" : "border-l-burgundy"
+                              }`}
                           >
                             <CardContent className="p-6">
                               <h4 className="font-poppins font-bold text-gold-dark dark:text-gold text-base mb-3 leading-snug">
@@ -297,7 +295,7 @@ export default function ServicesPage() {
             <Button
               asChild
               size="lg"
-              className="bg-gold hover:bg-gold-light text-burgundy-dark font-bold rounded-xl h-14 px-8 text-base shadow-gold"
+              className="bg-gold hover:bg-gold-light text-white font-bold rounded-xl h-14 px-8 text-base shadow-gold"
             >
               <Link href="/book">
                 <Calendar className="mr-2 h-5 w-5" /> Book Consultation

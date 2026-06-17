@@ -211,7 +211,7 @@ export default function SlugPageClient({
               </div>
             )}
 
-            <h1 className="max-w-4xl text-3xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
+            <h1 className="max-w-4xl text-xl font-extrabold leading-tight text-white md:text-2xl lg:text-4xl">
               {title}
             </h1>
 

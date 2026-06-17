@@ -1,16 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
+import {
+  Mail,
+  Phone,
+  MapPin,
   ShieldCheck,
 
   Clock
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import ContactForm  from "@/components/forms/contactForm";
+import ContactForm from "@/components/forms/contactForm";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -34,14 +34,14 @@ export default function ContactPage() {
         <div className="absolute inset-0 z-0 opacity-10">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_30%,var(--tw-color-gold)_0%,transparent_50%)] opacity-20" />
         </div>
-        
+
         <div className="container relative z-10 mx-auto px-4 text-center max-w-4xl">
           <motion.div
             initial="initial"
             animate="animate"
             variants={fadeIn}
           >
-            <Badge  className="mb-6">Contact Us</Badge>
+            <Badge className="mb-6">Contact Us</Badge>
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight font-poppins mb-8 leading-[1.1]">
               Let&apos;s Start a <br />
               <span className="text-gradient-gold">Conversation.</span>
@@ -57,7 +57,7 @@ export default function ContactPage() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-5 gap-16 items-start">
             {/* Contact Info Side */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -67,7 +67,7 @@ export default function ContactPage() {
                 <h2 className="text-3xl font-bold font-poppins text-charcoal mb-6">Direct Channels</h2>
                 <div className="space-y-6">
                   {[
-                    { title: "Email Address", value: "taiwo.olanrewaju@mygreatway.ca", icon: Mail, link: "mailto:taiwo.olanrewaju@mygreatway.ca" },
+                    { title: "Email Address", value: "insured@taiwoolanrewaju.org", icon: Mail, link: "mailto:insured@taiwoolanrewaju.org" },
                     { title: "Direct Phone", value: "+1 613 519 4228", icon: Phone, link: "tel: +1 613 519 4228" },
                     { title: "Corporate Office", value: "6 Antares Drive, Unit 7, Nepean, ON K2E 8A9 Phone Number: +1 613 519 4228", icon: MapPin, link: "#" },
                   ].map((item, i) => (
