@@ -32,6 +32,58 @@ export const ALL_POSTS_QUERY = `
 }
 `;
 
+export const POST_BY_SLUG_QUERY = `
+*[_type == "post" && slug.current == $slug][0]{
+  _id,
+  title,
+  slug{ current },
+  excerpt,
+  body,
+  mainImage{
+    asset->{
+      _id,
+      url
+    },
+    alt
+  },
+  publishedAt,
+  author->{
+    name,
+    image{
+      asset->{
+        _id,
+        url
+      }
+    }
+  }
+}
+`;
+
+
+
+
+export const ALL_POST_SLUGS_QUERY = `
+*[_type == "post"]{
+  "slug": slug.current
+}
+`;
+
+
+
+
+export const RELATED_POSTS_QUERY = `
+*[_type == "post"][0...3]{
+  _id,
+  title,
+  slug{ current },
+  mainImage{
+    asset->{
+      url
+    }
+  }
+}
+`;
+
 // ─────────────────────────────────────────────
 // POSTS (LATEST)
 // ─────────────────────────────────────────────
