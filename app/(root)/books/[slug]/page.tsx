@@ -22,9 +22,11 @@ interface Book {
 export default async function BookPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const { slug } = await params;
+
+  console.log("SLUG:", slug);
 
   if (!slug) {
     return notFound();
@@ -40,10 +42,8 @@ export default async function BookPage({
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HERO SECTION */}
       <section className="bg-gradient-to-r from-burgundy to-black text-white py-20">
         <div className="container mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
-          {/* IMAGE */}
           <div className="relative h-[420px] w-full">
             <Image
               src={image}
@@ -53,7 +53,6 @@ export default async function BookPage({
             />
           </div>
 
-          {/* DETAILS */}
           <div>
             <div className="flex items-center gap-2 mb-3 text-white/80">
               <BookOpen className="w-5 h-5" />
@@ -98,7 +97,6 @@ export default async function BookPage({
         </div>
       </section>
 
-      {/* PREVIEW */}
       {book.fileUrl && (
         <section className="py-20 container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-6">Preview</h2>
