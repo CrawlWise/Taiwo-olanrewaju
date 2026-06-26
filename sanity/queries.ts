@@ -17,9 +17,9 @@ export const ALL_POSTS_QUERY = defineQuery(`
   }
 `);
 
-// ── Latest 5 Posts ────────────────────────────────────────────────────────────
+// ── Latest 3 Posts ────────────────────────────────────────────────────────────
 export const LATEST_POSTS_QUERY = defineQuery(`
-  *[_type == "post"] | order(publishedAt desc) [0...5] {
+  *[_type == "post"] | order(publishedAt desc) [0...3] {
     _id,
     title,
     slug,

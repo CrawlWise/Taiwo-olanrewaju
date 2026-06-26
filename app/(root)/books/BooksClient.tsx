@@ -62,6 +62,15 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
   const [downloadName, setDownloadName] = useState("");
   const [downloadEmail, setDownloadEmail] = useState("");
   const [downloadPhone, setDownloadPhone] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const closeModal = () => {
+    setSelectedBook(null);
+    setIsSuccess(false);
+    setDownloadName("");
+    setDownloadEmail("");
+    setDownloadPhone("");
+  };
 
   const onDownloadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,21 +87,14 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
           email: downloadEmail,
           phone: downloadPhone,
           bookTitle: selectedBook.title,
+          fileUrl: selectedBook.fileUrl || null,
         }),
       });
 
       if (response.ok) {
-        if (selectedBook.fileUrl) {
-          window.open(selectedBook.fileUrl, "_blank");
-        } else {
-          alert("This book PDF is currently being prepared. Check back soon!");
-        }
-        
-        // Reset and close only on success
+        setIsSuccess(true);
         setDownloadName("");
-        setDownloadEmail("");
         setDownloadPhone("");
-        setSelectedBook(null);
       } else {
         const data = await response.json();
         alert(data.error || "Failed to process download request. Please try again.");
@@ -206,7 +208,7 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedBook(null)}
+              onClick={closeModal}
               className="absolute inset-0 bg-black/60 backdrop-blur-md"
             />
             
@@ -220,73 +222,100 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
             >
               {/* Close Button */}
               <button
-                onClick={() => setSelectedBook(null)}
+                onClick={closeModal}
                 className="absolute top-6 right-6 p-2 rounded-full bg-muted hover:bg-muted-foreground/10 text-charcoal/80 transition-colors"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <Badge className="mb-4">Free eBook Download</Badge>
-              <h3 className="text-2xl md:text-3xl font-bold font-poppins text-charcoal mb-3 pr-8">
-                {selectedBook.title}
-              </h3>
-              <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                Enter your details below to receive your complimentary copy instantly in your browser and your email inbox.
-              </p>
+              {isSuccess ? (
+                <div className="text-center py-6 space-y-6">
+                  <div className="mx-auto w-16 h-16 bg-burgundy/5 rounded-full flex items-center justify-center text-burgundy border border-burgundy/10">
+                    <ShieldCheck className="w-8 h-8" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold font-poppins text-charcoal">eBook Sent Successfully!</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      We have sent your copy of <br />
+                      <strong className="text-burgundy font-semibold">"{selectedBook.title}"</strong> <br />
+                      to <span className="underline decoration-burgundy decoration-2 text-charcoal font-medium">{downloadEmail}</span>.
+                    </p>
+                  </div>
+                  <p className="text-xs text-muted-foreground/75 leading-relaxed pt-2 border-t border-muted/50">
+                    Please check your inbox (and your spam/promotions folder) within a few minutes to access your eBook.
+                  </p>
+                  <Button 
+                    onClick={closeModal}
+                    className="w-full h-12 bg-burgundy hover:bg-burgundy-light text-white rounded-xl font-bold mt-4"
+                  >
+                    Done
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <Badge className="mb-4">Free eBook Download</Badge>
+                  <h3 className="text-2xl md:text-3xl font-bold font-poppins text-charcoal mb-3 pr-8">
+                    {selectedBook.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                    Enter your details below to receive your complimentary copy securely in your email inbox.
+                  </p>
 
-              <form onSubmit={onDownloadSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="downloaderName" className="block text-xs uppercase font-bold text-charcoal mb-1.5 tracking-wider">
-                    Your Name
-                  </label>
-                  <Input
-                    id="downloaderName"
-                    required
-                    value={downloadName}
-                    onChange={(e) => setDownloadName(e.target.value)}
-                    placeholder="Enter your name"
-                    className="h-12 rounded-xl border-border/80 focus:border-burgundy focus:ring-1 focus:ring-burgundy"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="downloaderEmail" className="block text-xs uppercase font-bold text-charcoal mb-1.5 tracking-wider">
-                    Email Address
-                  </label>
-                  <Input
-                    id="downloaderEmail"
-                    type="email"
-                    required
-                    value={downloadEmail}
-                    onChange={(e) => setDownloadEmail(e.target.value)}
-                    placeholder="name@example.com"
-                    className="h-12 rounded-xl border-border/80 focus:border-burgundy focus:ring-1 focus:ring-burgundy"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="downloaderPhone" className="block text-xs uppercase font-bold text-charcoal mb-1.5 tracking-wider">
-                    Phone Number
-                  </label>
-                  <Input
-                    id="downloaderPhone"
-                    type="tel"
-                    required
-                    value={downloadPhone}
-                    onChange={(e) => setDownloadPhone(e.target.value)}
-                    placeholder="e.g. +1 (123) 456-7890"
-                    className="h-12 rounded-xl border-border/80 focus:border-burgundy focus:ring-1 focus:ring-burgundy"
-                  />
-                </div>
-                <Button 
-                  type="submit" 
-                  className="w-full h-14 text-base font-bold bg-burgundy hover:bg-burgundy-light text-white rounded-xl shadow-lg mt-6 flex items-center justify-center gap-2"
-                >
-                  Download Now <Download className="w-5 h-5" />
-                </Button>
-                <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest font-bold">
-                  Direct Download + Sent instantly to inbox
-                </p>
-              </form>
+                  <form onSubmit={onDownloadSubmit} className="space-y-4">
+                    <div>
+                      <label htmlFor="downloaderName" className="block text-xs uppercase font-bold text-charcoal mb-1.5 tracking-wider">
+                        Your Name
+                      </label>
+                      <Input
+                        id="downloaderName"
+                        required
+                        value={downloadName}
+                        onChange={(e) => setDownloadName(e.target.value)}
+                        placeholder="Enter your name"
+                        className="h-12 rounded-xl border-border/80 focus:border-burgundy focus:ring-1 focus:ring-burgundy"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="downloaderEmail" className="block text-xs uppercase font-bold text-charcoal mb-1.5 tracking-wider">
+                        Email Address
+                      </label>
+                      <Input
+                        id="downloaderEmail"
+                        type="email"
+                        required
+                        value={downloadEmail}
+                        onChange={(e) => setDownloadEmail(e.target.value)}
+                        placeholder="name@example.com"
+                        className="h-12 rounded-xl border-border/80 focus:border-burgundy focus:ring-1 focus:ring-burgundy"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="downloaderPhone" className="block text-xs uppercase font-bold text-charcoal mb-1.5 tracking-wider">
+                        Phone Number
+                      </label>
+                      <Input
+                        id="downloaderPhone"
+                        type="tel"
+                        required
+                        value={downloadPhone}
+                        onChange={(e) => setDownloadPhone(e.target.value)}
+                        placeholder="e.g. +1 (123) 456-7890"
+                        className="h-12 rounded-xl border-border/80 focus:border-burgundy focus:ring-1 focus:ring-burgundy"
+                      />
+                    </div>
+                    <Button 
+                      type="submit" 
+                      className="w-full h-14 text-base font-bold bg-burgundy hover:bg-burgundy-light text-white rounded-xl shadow-lg mt-6 flex items-center justify-center gap-2"
+                    >
+                      Send My eBook <Download className="w-5 h-5" />
+                    </Button>
+                    <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest font-bold">
+                      Sent securely to your email address
+                    </p>
+                  </form>
+                </>
+              )}
             </motion.div>
           </div>
         )}
