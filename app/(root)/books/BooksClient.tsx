@@ -8,7 +8,8 @@ import {
   ShieldCheck, 
   Star,
   BookOpen,
-  X
+  X,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,10 +60,17 @@ const fadeIn = {
 
 export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [purchaseBook, setPurchaseBook] = useState<Book | null>(null);
   const [downloadName, setDownloadName] = useState("");
   const [downloadEmail, setDownloadEmail] = useState("");
   const [downloadPhone, setDownloadPhone] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  // Purchase modal state
+  const [purchaseName, setPurchaseName] = useState("");
+  const [purchaseEmail, setPurchaseEmail] = useState("");
+  const [purchasePhone, setPurchasePhone] = useState("");
+  const [isPurchaseSubmitting, setIsPurchaseSubmitting] = useState(false);
 
   const closeModal = () => {
     setSelectedBook(null);
@@ -72,9 +80,17 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
     setDownloadPhone("");
   };
 
+  const closePurchaseModal = () => {
+    setPurchaseBook(null);
+    setPurchaseName("");
+    setPurchaseEmail("");
+    setPurchasePhone("");
+  };
+
   const onDownloadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedBook) return;
+    setIsDownloading(true);
 
     try {
       const response = await fetch("/api/download", {
@@ -102,16 +118,51 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
     } catch (error) {
       console.error("Failed to submit download notification:", error);
       alert("Network error. Please check your connection and try again.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
   const handlePurchase = (book: Book) => {
-    if (book.paymentLink) {
-      window.location.href = book.paymentLink;
-    } else if (book.fileUrl) {
-      window.open(book.fileUrl, "_blank");
-    } else {
-      alert(`Redirecting to payment gateway for "${book.title}"...`);
+    setPurchaseBook(book);
+  };
+
+  const onPurchaseSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!purchaseBook) return;
+    setIsPurchaseSubmitting(true);
+
+    try {
+      // Send lead email first — block until the server confirms it was sent
+      const response = await fetch("/api/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: purchaseName,
+          email: purchaseEmail,
+          phone: purchasePhone,
+          bookTitle: purchaseBook.title,
+          fileUrl: null,
+          isPurchase: true,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data.error || "Failed to send confirmation email. Please try again.");
+        setIsPurchaseSubmitting(false);
+        return; // Do NOT redirect if email failed
+      }
+
+      // Email confirmed sent — now redirect to PayPal
+      if (purchaseBook.paymentLink) {
+        window.location.href = purchaseBook.paymentLink;
+      } else {
+        closePurchaseModal();
+      }
+    } catch {
+      alert("Network error. Please check your connection and try again.");
+      setIsPurchaseSubmitting(false);
     }
   };
 
@@ -306,9 +357,18 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
                     </div>
                     <Button 
                       type="submit" 
-                      className="w-full h-14 text-base font-bold bg-burgundy hover:bg-burgundy-light text-white rounded-xl shadow-lg mt-6 flex items-center justify-center gap-2"
+                      disabled={isDownloading}
+                      className="w-full h-14 text-base font-bold bg-burgundy hover:bg-burgundy-light text-white rounded-xl shadow-lg mt-6 flex items-center justify-center gap-2 disabled:opacity-75"
                     >
-                      Send My eBook <Download className="w-5 h-5" />
+                      {isDownloading ? (
+                        <>
+                          Sending... <Loader2 className="w-5 h-5 animate-spin" />
+                        </>
+                      ) : (
+                        <>
+                          Send My eBook <Download className="w-5 h-5" />
+                        </>
+                      )}
                     </Button>
                     <p className="text-[10px] text-center text-muted-foreground uppercase tracking-widest font-bold">
                       Sent securely to your email address
@@ -316,6 +376,119 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
                   </form>
                 </>
               )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Purchase Lead Capture Modal */}
+      <AnimatePresence>
+        {purchaseBook && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closePurchaseModal}
+              className="absolute inset-0 bg-black/70 backdrop-blur-md"
+            />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="relative w-full max-w-lg bg-charcoal rounded-[32px] overflow-hidden border border-gold/20 shadow-2xl p-8 md:p-10 z-10"
+            >
+              {/* Close Button */}
+              <button
+                onClick={closePurchaseModal}
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 transition-colors"
+                aria-label="Close dialog"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Gold accent bar */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-gold-light to-gold" />
+
+              <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 hover:bg-gold/30">
+                Premium Purchase
+              </Badge>
+              <h3 className="text-2xl md:text-3xl font-bold font-poppins text-white mb-2 pr-8">
+                {purchaseBook.title}
+              </h3>
+              <p className="text-sm text-white/60 mb-1">
+                <span className="text-gold font-black text-lg">${purchaseBook.price || "49.99"}</span>
+                <span className="text-white/40 text-xs ml-1">CAD</span>
+              </p>
+              <p className="text-sm text-white/50 mb-6 leading-relaxed">
+                Enter your details below — you&apos;ll be securely redirected to PayPal to complete your purchase.
+              </p>
+
+              <form onSubmit={onPurchaseSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="purchaseName" className="block text-xs uppercase font-bold text-white/60 mb-1.5 tracking-wider">
+                    Your Name
+                  </label>
+                  <Input
+                    id="purchaseName"
+                    required
+                    value={purchaseName}
+                    onChange={(e) => setPurchaseName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-gold focus:ring-1 focus:ring-gold"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="purchaseEmail" className="block text-xs uppercase font-bold text-white/60 mb-1.5 tracking-wider">
+                    Email Address
+                  </label>
+                  <Input
+                    id="purchaseEmail"
+                    type="email"
+                    required
+                    value={purchaseEmail}
+                    onChange={(e) => setPurchaseEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-gold focus:ring-1 focus:ring-gold"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="purchasePhone" className="block text-xs uppercase font-bold text-white/60 mb-1.5 tracking-wider">
+                    Phone Number
+                  </label>
+                  <Input
+                    id="purchasePhone"
+                    type="tel"
+                    required
+                    value={purchasePhone}
+                    onChange={(e) => setPurchasePhone(e.target.value)}
+                    placeholder="e.g. +1 (123) 456-7890"
+                    className="h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-white/30 focus:border-gold focus:ring-1 focus:ring-gold"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={isPurchaseSubmitting}
+                  className="w-full h-14 text-base font-bold bg-gold hover:bg-gold-light text-charcoal rounded-xl shadow-lg mt-6 flex items-center justify-center gap-2 disabled:opacity-75"
+                >
+                  {isPurchaseSubmitting ? (
+                    <>
+                      Redirecting... <Loader2 className="w-5 h-5 animate-spin" />
+                    </>
+                  ) : (
+                    <>
+                      Proceed to Checkout <ShoppingCart className="w-5 h-5" />
+                    </>
+                  )}
+                </Button>
+                <p className="text-[10px] text-center text-white/30 uppercase tracking-widest font-bold">
+                  Secured by PayPal
+                </p>
+              </form>
             </motion.div>
           </div>
         )}

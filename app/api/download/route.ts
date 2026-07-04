@@ -4,7 +4,7 @@ const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export async function POST(request: Request) {
   try {
-    const { name, email, phone, bookTitle, fileUrl } = await request.json();
+    const { name, email, phone, bookTitle, fileUrl, isPurchase } = await request.json();
 
     if (!name || !email || !phone || !bookTitle) {
       return new Response(
@@ -13,7 +13,122 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Send the download email to the user
+    // ── PURCHASE INTENT FLOW ─────────────────────────────────────────────────
+    if (isPurchase) {
+      // 1. Send confirmation email to the user
+      const purchaseUserEmailHtml = `
+        <div style="font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #111111; padding: 40px 20px; color: #f5f5f5; line-height: 1.6;">
+          <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a1a; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.4); border: 1px solid #2a2a2a;">
+            <!-- Header -->
+            <div style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%); padding: 0; border-bottom: 2px solid #D4AF37;">
+              <div style="padding: 35px 30px; text-align: center;">
+                <div style="display: inline-block; padding: 4px 14px; background-color: rgba(212,175,55,0.15); border: 1px solid #D4AF37; border-radius: 20px; color: #D4AF37; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;">Premium Purchase</div>
+                <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; line-height: 1.3;">You're Almost There!</h1>
+                <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.55);">Taiwo Olanrewaju | Financial Advisor</p>
+              </div>
+            </div>
+            <!-- Body -->
+            <div style="padding: 40px 30px;">
+              <p style="margin-top: 0; font-size: 16px; font-weight: 600; color: #f5f5f5;">Hello ${name},</p>
+              <p style="font-size: 15px; color: #aaaaaa; margin-bottom: 25px;">
+                Thank you for your interest in <strong style="color: #D4AF37;">&ldquo;${bookTitle}&rdquo;</strong>. We've recorded your details and you are being redirected to PayPal to complete your secure purchase.
+              </p>
+              <div style="background-color: #111111; border: 1px solid #2a2a2a; border-left: 4px solid #D4AF37; border-radius: 12px; padding: 20px 24px; margin: 30px 0;">
+                <p style="margin: 0 0 6px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #888888; font-weight: 700;">Your Order</p>
+                <p style="margin: 0; font-size: 18px; font-weight: 700; color: #D4AF37;">${bookTitle}</p>
+              </div>
+              <p style="font-size: 14px; color: #777777; margin-top: 30px;">
+                Once payment is confirmed, you will receive access instructions directly from PayPal. If you have any questions or run into any issues, please reply to this email.
+              </p>
+              <div style="margin-top: 35px; border-top: 1px solid #2a2a2a; padding-top: 20px;">
+                <h4 style="margin: 0; font-size: 15px; color: #f5f5f5; font-weight: 600;">Taiwo Olanrewaju</h4>
+                <p style="margin: 2px 0 0 0; font-size: 13px; color: #555555;">Financial Advisor</p>
+              </div>
+            </div>
+            <div style="background-color: #111111; padding: 20px 30px; text-align: center; border-top: 1px solid #2a2a2a; font-size: 12px; color: #444444;">
+              <p style="margin: 0 0 4px 0;">This email was sent from the Taiwo Olanrewaju website.</p>
+              <p style="margin: 0;">&copy; ${new Date().getFullYear()} Taiwo Olanrewaju. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const purchaseUserRes = await resend.emails.send({
+        from: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
+        to: email,
+        subject: `Your Purchase: ${bookTitle} — Completing Checkout`,
+        html: purchaseUserEmailHtml,
+      });
+
+      if (purchaseUserRes.error) {
+        console.error("Purchase user email error:", purchaseUserRes.error);
+        return new Response(
+          JSON.stringify({ error: purchaseUserRes.error.message }),
+          { status: 500, headers: { "Content-Type": "application/json" } }
+        );
+      }
+
+      // 2. Notify admin of the purchase intent lead
+      try {
+        const purchaseAdminEmailHtml = `
+          <div style="font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #f7f7f9; padding: 40px 20px; color: #2c2c2c; line-height: 1.6;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;">
+              <div style="background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%); padding: 30px; text-align: center; border-bottom: 3px solid #D4AF37;">
+                <div style="display: inline-block; padding: 3px 12px; background-color: rgba(212,175,55,0.2); border: 1px solid #D4AF37; border-radius: 20px; color: #D4AF37; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;">💰 Purchase Intent Lead</div>
+                <h1 style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; color: #ffffff;">New Premium Book Lead</h1>
+                <p style="margin: 5px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.6);">Lead captured before PayPal checkout</p>
+              </div>
+              <div style="padding: 40px 30px;">
+                <p style="margin-top: 0; font-size: 16px;">Hello Taiwo,</p>
+                <p style="font-size: 15px; color: #4a4a4a;">A user has just submitted their details and is being redirected to PayPal to purchase one of your premium guides.</p>
+                <div style="margin: 30px 0;">
+                  <div style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+                    <strong style="font-size: 13px; text-transform: uppercase; color: #888888; display: block; margin-bottom: 4px;">Book Title</strong>
+                    <span style="font-size: 16px; color: #D4AF37; font-weight: 700;">${bookTitle}</span>
+                  </div>
+                  <div style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+                    <strong style="font-size: 13px; text-transform: uppercase; color: #888888; display: block; margin-bottom: 4px;">Lead Name</strong>
+                    <span style="font-size: 16px; color: #111111; font-weight: 600;">${name}</span>
+                  </div>
+                  <div style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+                    <strong style="font-size: 13px; text-transform: uppercase; color: #888888; display: block; margin-bottom: 4px;">Email Address</strong>
+                    <a href="mailto:${email}" style="font-size: 16px; color: #800020; text-decoration: none; font-weight: 600;">${email}</a>
+                  </div>
+                  <div style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+                    <strong style="font-size: 13px; text-transform: uppercase; color: #888888; display: block; margin-bottom: 4px;">Phone Number</strong>
+                    <a href="tel:${phone}" style="font-size: 16px; color: #111111; text-decoration: none; font-weight: 600;">${phone}</a>
+                  </div>
+                  <div style="padding: 12px 0;">
+                    <strong style="font-size: 13px; text-transform: uppercase; color: #888888; display: block; margin-bottom: 4px;">Lead Type</strong>
+                    <span style="font-size: 14px; color: #ffffff; background-color: #D4AF37; font-weight: 700; padding: 2px 10px; border-radius: 20px;">Purchase Intent (Pre-PayPal)</span>
+                  </div>
+                </div>
+                <p style="font-size: 13px; color: #999999;">Note: This lead was captured at form submission. Payment completion depends on the user completing the PayPal flow.</p>
+              </div>
+              <div style="background-color: #fafafa; padding: 20px 30px; text-align: center; border-top: 1px solid #f0f0f0; font-size: 12px; color: #aaaaaa;">
+                <p style="margin: 0;">Sent automatically from the Taiwo Olanrewaju website purchase flow.</p>
+              </div>
+            </div>
+          </div>
+        `;
+
+        await resend.emails.send({
+          from: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
+          to: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
+          subject: `💰 Purchase Intent Lead: ${name} — ${bookTitle}`,
+          html: purchaseAdminEmailHtml,
+        });
+      } catch (adminError) {
+        console.error("Failed to send purchase admin notification:", adminError);
+      }
+
+      return new Response(
+        JSON.stringify({ success: true, message: "Purchase lead captured and emails sent" }),
+        { status: 200, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // ── FREE DOWNLOAD FLOW ───────────────────────────────────────────────────
     const userEmailHtml = `
       <div style="font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #f7f7f9; padding: 40px 20px; color: #2c2c2c; line-height: 1.6;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
@@ -63,7 +178,7 @@ export async function POST(request: Request) {
     `;
 
     const userEmailResponse = await resend.emails.send({
-      from: process.env.EMAIL_FROM!,
+      from: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
       to: email,
       subject: `Your Free Copy: ${bookTitle}`,
       html: userEmailHtml,
@@ -123,8 +238,8 @@ export async function POST(request: Request) {
       `;
 
       await resend.emails.send({
-        from: process.env.EMAIL_FROM!,
-        to: process.env.EMAIL_FROM!,
+        from: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
+        to: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
         subject: `New Lead: eBook Download Requested - ${bookTitle}`,
         html: adminEmailHtml,
       });
