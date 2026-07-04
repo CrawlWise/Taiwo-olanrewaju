@@ -14,8 +14,8 @@ export async function POST(request: Request) {
     }
 
     const emailResponse = await resend.emails.send({
-      from: process.env.EMAIL_FROM!,
-      to: process.env.EMAIL_FROM!,
+      from: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
+      to: process.env.EMAIL_FROM || "insured@taiwoolanrewaju.org",
       subject: `New Career Application: ${name}`,
       html: `
         <div style="font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #f7f7f9; padding: 40px 20px; color: #2c2c2c; line-height: 1.6;">

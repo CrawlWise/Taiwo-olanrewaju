@@ -18,7 +18,8 @@ import {
   Plane,
   Stethoscope,
   Download,
-  ShieldCheck
+  ShieldCheck,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -53,9 +54,11 @@ export default function HomeClient({ initialBlogPosts, initialFreeBook }: HomeCl
   const [downloadEmail, setDownloadEmail] = useState("");
   const [downloadPhone, setDownloadPhone] = useState("");
   const [downloadSubmitted, setDownloadSubmitted] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsDownloading(true);
 
     try {
       const response = await fetch("/api/download", {
@@ -83,6 +86,8 @@ export default function HomeClient({ initialBlogPosts, initialFreeBook }: HomeCl
     } catch (error) {
       console.error("Failed to submit download notification:", error);
       alert("Network error. Please check your connection and try again.");
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -485,8 +490,20 @@ export default function HomeClient({ initialBlogPosts, initialFreeBook }: HomeCl
                         className="w-full h-11 rounded-xl px-4 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-gold text-sm"
                       />
                     </div>
-                    <Button type="submit" className="w-full h-12 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-gold">
-                      Send My eBook <Download className="w-4 h-4" />
+                    <Button 
+                      type="submit" 
+                      disabled={isDownloading}
+                      className="w-full h-12 bg-gold hover:bg-gold-light text-burgundy-dark font-black rounded-xl text-sm flex items-center justify-center gap-2 shadow-gold disabled:opacity-75"
+                    >
+                      {isDownloading ? (
+                        <>
+                          Sending... <Loader2 className="w-4 h-4 animate-spin" />
+                        </>
+                      ) : (
+                        <>
+                          Send My eBook <Download className="w-4 h-4" />
+                        </>
+                      )}
                     </Button>
                     <p className="text-[10px] text-center text-white/50 uppercase tracking-widest font-bold">Access exclusive insights instantly in your inbox</p>
                   </form>

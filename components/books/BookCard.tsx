@@ -48,61 +48,53 @@ export function BookCard({ book, onDownloadClick, onPurchaseClick }: BookCardPro
         : "bg-charcoal border-white/5 shadow-xl hover:shadow-[0_20px_40px_rgba(212,175,55,0.08)] hover:border-gold/20 text-white"
         }`}
     >
-      {/* Book Cover Area */}
-      <div className={`relative aspect-[4/3] w-full flex items-center justify-center overflow-hidden p-6 ${isFree ? "bg-muted/30" : "bg-white/5"
+      {/* Book Cover — full-bleed top section */}
+      <div className="relative w-full aspect-[3/2] overflow-hidden">
+        {bookCover ? (
+          <>
+            <Image
+              src={bookCover}
+              alt={book.coverImageAlt || book.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 480px"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              priority={false}
+            />
+            {/* Subtle gradient overlay so text on top remains readable */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+          </>
+        ) : (
+          /* Premium fallback when no cover image exists */
+          <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${
+            isFree
+              ? "bg-gradient-to-br from-burgundy to-burgundy-light"
+              : "bg-gradient-to-br from-charcoal via-black to-burgundy/60"
+          }`}>
+            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--tw-color-gold)_0%,transparent_70%)]" />
+            {isFree ? (
+              <BookOpen className="w-14 h-14 text-gold/80 z-10" />
+            ) : (
+              <Star className="w-14 h-14 text-gold fill-gold z-10" />
+            )}
+            <span className="text-[10px] uppercase tracking-widest font-black text-gold z-10">
+              {isFree ? "Free Guide" : "Premium Guide"}
+            </span>
+            <h4 className="text-sm font-bold text-white text-center leading-tight line-clamp-2 z-10 px-6">
+              {book.title}
+            </h4>
+            <div className="z-10 text-[9px] text-white/50">Taiwo Olanrewaju</div>
+          </div>
+        )}
+
+        {/* Tier badge pinned to top-right */}
+        <div className={`absolute top-3 right-3 z-10 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
+          isFree
+            ? "bg-burgundy/90 text-white"
+            : "bg-gold text-charcoal"
         }`}>
-        <div className={`absolute inset-0 opacity-10 ${isFree
-          ? "bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
-          : "bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"
-          }`} />
-
-        {/* Cover Container with lift/tilt animation */}
-        <div className="relative z-10 w-36 h-48 drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 group-hover:rotate-1">
-          {bookCover ? (
-            <div className={`w-full h-full rounded shadow-xl overflow-hidden border ${isFree ? "border-black/5" : "border-white/10"
-              }`}>
-              <Image
-                src={bookCover}
-                alt={book.coverImageAlt || book.title}
-                fill
-                sizes="(max-width: 768px) 150px, 180px"
-                className="object-cover"
-                priority={false}
-              />
-            </div>
-          ) : (
-            /* Premium fallbacks */
-            <div className={`w-full h-full rounded shadow-xl overflow-hidden border p-4 flex flex-col justify-between text-center relative ${isFree
-              ? "bg-gradient-to-tr from-burgundy to-burgundy-light border-black/5 text-white"
-              : "bg-gradient-to-tr from-burgundy/80 via-black to-charcoal border-white/10 text-white"
-              }`}>
-              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--tw-color-gold)_0%,transparent_70%)]" />
-              <div className="z-10 mt-2">
-                {isFree ? (
-                  <BookOpen className="w-8 h-8 mx-auto mb-2 text-gold/80" />
-                ) : (
-                  <Star className="w-8 h-8 mx-auto mb-2 text-gold fill-gold" />
-                )}
-                <span className="text-[9px] uppercase tracking-widest font-black text-gold">
-                  {isFree ? "Free Guide" : "Premium Guide"}
-                </span>
-              </div>
-              <h4 className="text-xs font-bold leading-tight line-clamp-3 z-10 my-auto">
-                {book.title}
-              </h4>
-              <div className="z-10 text-[8px] text-white/50 mb-1">
-                Taiwo Olanrewaju
-              </div>
-            </div>
-          )}
-
-          {/* Subtle reflection overlay */}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/0 via-white/5 to-white/20 mix-blend-overlay rounded" />
+          {isFree ? "Free" : "Premium"}
         </div>
-
-        {/* Backdrop Glow */}
-        <div className={`absolute -bottom-10 w-32 h-32 rounded-full blur-3xl opacity-20 -z-0 transition-opacity duration-500 group-hover:opacity-35 ${isFree ? "bg-burgundy" : "bg-gold"
-          }`} />
       </div>
 
       {/* Book Metadata & Actions */}
@@ -166,11 +158,11 @@ export function BookCard({ book, onDownloadClick, onPurchaseClick }: BookCardPro
             </div>
           </div>
 
-          {/* <Button
+          <Button
             onClick={handleAction}
             className={`px-5 py-5 rounded-xl font-bold text-sm flex items-center gap-2 transition-all duration-300 transform hover:scale-[1.03] active:scale-[0.98] ${isFree
-              ? "bg-burgundy hover:bg-burgundy-light text-white shadow-md hover:shadow-lg"
-              : "bg-gold hover:bg-gold-light text-charcoal shadow-md hover:shadow-lg"
+              ? "bg-burgundy hover:bg-burgundy-light text-white shadow-md hover:shadow-lg cursor-pointer"
+              : "bg-gold hover:bg-gold-light text-charcoal shadow-md hover:shadow-lg cursor-pointer"
               }`}
           >
             {isFree ? (
@@ -182,7 +174,7 @@ export function BookCard({ book, onDownloadClick, onPurchaseClick }: BookCardPro
                 Buy Now <ShoppingCart className="w-4 h-4" />
               </>
             )}
-          </Button> */}
+          </Button>
         </div>
       </div>
     </motion.div>
