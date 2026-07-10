@@ -65,11 +65,10 @@ export function BookCard({ book, onDownloadClick, onPurchaseClick }: BookCardPro
           </>
         ) : (
           /* Premium fallback when no cover image exists */
-          <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${
-            isFree
+          <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 ${isFree
               ? "bg-gradient-to-br from-burgundy to-burgundy-light"
               : "bg-gradient-to-br from-charcoal via-black to-burgundy/60"
-          }`}>
+            }`}>
             <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,var(--tw-color-gold)_0%,transparent_70%)]" />
             {isFree ? (
@@ -88,12 +87,20 @@ export function BookCard({ book, onDownloadClick, onPurchaseClick }: BookCardPro
         )}
 
         {/* Tier badge pinned to top-right */}
-        <div className={`absolute top-3 right-3 z-10 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${
-          isFree
-            ? "bg-burgundy/90 text-white"
-            : "bg-gold text-charcoal"
-        }`}>
-          {isFree ? "Free" : "Premium"}
+        <div className="flex items-center justify-between absolute top-0 left-0 w-full p-3">
+          <div className="free-ebook">
+            <Badge>
+              E-book
+            </Badge>
+          </div>
+          <div className={`absolute top-3 right-3 z-10 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${isFree
+              ? "bg-burgundy/90 text-white"
+              : "bg-gold text-charcoal"
+            }`}>
+
+            {isFree ? "Free" : "Premium"}
+
+          </div>
         </div>
       </div>
 
