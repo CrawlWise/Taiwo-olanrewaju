@@ -1,6 +1,7 @@
 import { sanityFetch } from "@/sanity/live";
-import { ALL_BOOKS_QUERY } from "@/sanity/queries";
+import { ALL_BOOKS_QUERY, ALL_AMAZON_BOOKS_QUERY } from "@/sanity/queries";
 import BooksClient, { Book } from "./BooksClient";
+import type { AmazonBook } from "@/types/book";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,6 +12,11 @@ export const metadata: Metadata = {
 export default async function BooksPage() {
   // Fetch stores and their books from Sanity
   const { data: stores } = (await sanityFetch({ query: ALL_BOOKS_QUERY })) as { data: any[] };
+
+  // Fetch Amazon hard-copy books
+  const { data: amazonBooks } = (await sanityFetch({ query: ALL_AMAZON_BOOKS_QUERY })) as {
+    data: AmazonBook[];
+  };
 
   // Group books by store tier
   const freeBooks: Book[] = [];
@@ -42,5 +48,11 @@ export default async function BooksPage() {
     });
   });
 
-  return <BooksClient freeBooks={freeBooks} paidBooks={paidBooks} />;
+  return (
+    <BooksClient
+      freeBooks={freeBooks}
+      paidBooks={paidBooks}
+      amazonBooks={amazonBooks ?? []}
+    />
+  );
 }

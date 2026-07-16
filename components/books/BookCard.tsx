@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Download, ShoppingCart, ShieldCheck, FileText, Star, ArrowRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { Book } from "@/app/(root)/books/BooksClient";
+import type { Book } from "@/types/book";
 
 interface BookCardProps {
   book: Book;
