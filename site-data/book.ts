@@ -10,7 +10,7 @@ export const meetingData: meetingTypes[] = [
     color: "burgundy",
     bgClass: "bg-burgundy",
     duration: "45-60 mins",
-    link: "https://calendar.app.google/BQTgf6xR9Ro3pw6d9" // Placeholder
+    link: "https://go.taiwoolanrewaju.org/widget/booking/vUD8BzTkOy2TFYHJFFLf" // Placeholder
   },
   {
     id: "in-person",
@@ -21,6 +21,45 @@ export const meetingData: meetingTypes[] = [
     color: "gold",
     bgClass: "bg-gold",
     duration: "60-90 mins",
-    link: "https://calendar.app.google/ZKpj2WACypicUynE9" // Placeholder
+    link: "https://go.taiwoolanrewaju.org/widget/booking/dIirfxRn3LZE83tX9aDc" // Placeholder
   }
 ];
+
+// ── Flag emoji map for common Amazon store locales ────────────────────────────
+export const FLAG_MAP: Record<string, string> = {
+  usa: "🇺🇸",
+  us: "🇺🇸",
+  "united states": "🇺🇸",
+  uk: "🇬🇧",
+  "united kingdom": "🇬🇧",
+  canada: "🇨🇦",
+  ca: "🇨🇦",
+  australia: "🇦🇺",
+  au: "🇦🇺",
+  germany: "🇩🇪",
+  de: "🇩🇪",
+  france: "🇫🇷",
+  fr: "🇫🇷",
+  italy: "🇮🇹",
+  it: "🇮🇹",
+  spain: "🇪🇸",
+  es: "🇪🇸",
+  japan: "🇯🇵",
+  jp: "🇯🇵",
+  india: "🇮🇳",
+  in: "🇮🇳",
+  brazil: "🇧🇷",
+  br: "🇧🇷",
+  mexico: "🇲🇽",
+  mx: "🇲🇽",
+  netherlands: "🇳🇱",
+  nl: "🇳🇱",
+  sweden: "🇸🇪",
+  se: "🇸🇪",
+  poland: "🇵🇱",
+  pl: "🇵🇱",
+  "south africa": "🇿🇦",
+  za: "🇿🇦",
+  nigeria: "🇳🇬",
+  ng: "🇳🇬",
+};

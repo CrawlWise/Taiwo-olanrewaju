@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Download, 
-  ShoppingCart, 
-  ShieldCheck, 
+import {
+  Download,
+  ShoppingCart,
+  ShieldCheck,
   Star,
   BookOpen,
   X,
@@ -15,41 +15,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { BookCard } from "@/components/books/BookCard";
+import { BookCardHardCopy } from "@/components/books/BookCardHardCopy";
+import type { AmazonBook, Book } from "@/types/book";
 
-export interface Book {
-  title: string;
-  summary?: string;
-  price?: number;
-  isbn?: string;
-  publishedDate?: string;
-  coverImage?: {
-    asset?: {
-      url: string;
-    };
-  };
-  coverImageAlt?: string;
-  author?: {
-    name: string;
-    image?: {
-      asset?: {
-        url: string;
-      };
-      alt?: string;
-    };
-  };
-  categories?: Array<{
-    _id: string;
-    title: string;
-    slug?: { current: string };
-  }>;
-  fileUrl?: string;
-  storeTier: string;
-  paymentLink?: string;
-}
+export type { Book };
 
 interface BooksClientProps {
   freeBooks: Book[];
   paidBooks: Book[];
+  amazonBooks: AmazonBook[];
 }
 
 const fadeIn = {
@@ -58,7 +32,7 @@ const fadeIn = {
   transition: { duration: 0.6 }
 };
 
-export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) {
+export default function BooksClient({ freeBooks, paidBooks, amazonBooks }: BooksClientProps) {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [purchaseBook, setPurchaseBook] = useState<Book | null>(null);
   const [downloadName, setDownloadName] = useState("");
@@ -133,7 +107,7 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
     setIsPurchaseSubmitting(true);
 
     try {
-      // Send lead email first — block until the server confirms it was sent
+      // Send lead email first
       const response = await fetch("/api/download", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -151,7 +125,7 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
         const data = await response.json();
         alert(data.error || "Failed to send confirmation email. Please try again.");
         setIsPurchaseSubmitting(false);
-        return; // Do NOT redirect if email failed
+        return;
       }
 
       // Email confirmed sent — now redirect to PayPal
@@ -173,7 +147,7 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
         <div className="absolute inset-0 z-0 opacity-10">
           <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_30%,var(--tw-color-gold)_0%,transparent_60%)] opacity-30" />
         </div>
-        
+
         <div className="container relative z-10 mx-auto px-4 text-center max-w-4xl">
           <motion.div
             initial="initial"
@@ -211,7 +185,7 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
               {freeBooks.map((book, idx) => (
-                <BookCard 
+                <BookCard
                   key={idx}
                   book={book}
                   onDownloadClick={(b) => setSelectedBook(b)}
@@ -222,39 +196,52 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
         </div>
 
         {/* ==================== PAID BOOKS SECTION ==================== */}
-        <div>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold font-poppins text-charcoal mb-4">Premium Guides</h2>
-            <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              Take your strategies to the next level with our premium, high-impact blueprints.
-            </p>
-          </div>
+  <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+  {/* Paid Books */}
+  <div>
+    {paidBooks.length === 0 ? (
+      <div className="text-center py-12 border-2 border-dashed border-muted rounded-3xl">
+        <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+        <h3 className="text-xl font-semibold text-charcoal">
+          No Premium Books Available
+        </h3>
+        <p className="text-muted-foreground mt-2">
+          Check back soon for new premium guides.
+        </p>
+      </div>
+    ) : (
+      <div className="grid grid-cols-1 gap-8">
+        {paidBooks.map((book, idx) => (
+          <BookCard
+            key={idx}
+            book={book}
+            onPurchaseClick={(b) => handlePurchase(b)}
+          />
+        ))}
+      </div>
+    )}
+  </div>
 
-          {paidBooks.length === 0 ? (
-            <div className="text-center py-12 border-2 border-dashed border-muted rounded-3xl">
-              <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-charcoal">No Premium Books Available</h3>
-              <p className="text-muted-foreground mt-2">Check back soon for new premium guides.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-              {paidBooks.map((book, idx) => (
-                <BookCard 
-                  key={idx}
-                  book={book}
-                  onPurchaseClick={(b) => handlePurchase(b)}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+  {/* Amazon Hard Copy */}
+  <div>
+    {amazonBooks && amazonBooks.length > 0 && (
+      <div className="grid grid-cols-1 gap-8">
+        {amazonBooks.map((book) => (
+          <BookCardHardCopy
+            key={book._id}
+            book={book}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+</div>
       </div>
 
       {/* Download Lead Capture Modal */}
       <AnimatePresence>
         {selectedBook && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop with blur */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -262,8 +249,6 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
               onClick={closeModal}
               className="absolute inset-0 bg-black/60 backdrop-blur-md"
             />
-            
-            {/* Modal Box */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -271,7 +256,6 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
               transition={{ type: "spring", duration: 0.5 }}
               className="relative w-full max-w-lg bg-white rounded-[32px] overflow-hidden border border-burgundy/10 shadow-2xl p-8 md:p-10 z-10"
             >
-              {/* Close Button */}
               <button
                 onClick={closeModal}
                 className="absolute top-6 right-6 p-2 rounded-full bg-muted hover:bg-muted-foreground/10 text-charcoal/80 transition-colors"
@@ -289,14 +273,14 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
                     <h3 className="text-2xl font-bold font-poppins text-charcoal">eBook Sent Successfully!</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                       We have sent your copy of <br />
-                      <strong className="text-burgundy font-semibold">"{selectedBook.title}"</strong> <br />
+                      <strong className="text-burgundy font-semibold">&quot;{selectedBook.title}&quot;</strong> <br />
                       to <span className="underline decoration-burgundy decoration-2 text-charcoal font-medium">{downloadEmail}</span>.
                     </p>
                   </div>
                   <p className="text-xs text-muted-foreground/75 leading-relaxed pt-2 border-t border-muted/50">
                     Please check your inbox (and your spam/promotions folder) within a few minutes to access your eBook.
                   </p>
-                  <Button 
+                  <Button
                     onClick={closeModal}
                     className="w-full h-12 bg-burgundy hover:bg-burgundy-light text-white rounded-xl font-bold mt-4"
                   >
@@ -355,8 +339,8 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
                         className="h-12 rounded-xl border-border/80 focus:border-burgundy focus:ring-1 focus:ring-burgundy"
                       />
                     </div>
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       disabled={isDownloading}
                       className="w-full h-14 text-base font-bold bg-burgundy hover:bg-burgundy-light text-white rounded-xl shadow-lg mt-6 flex items-center justify-center gap-2 disabled:opacity-75"
                     >
@@ -385,7 +369,6 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
       <AnimatePresence>
         {purchaseBook && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -393,8 +376,6 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
               onClick={closePurchaseModal}
               className="absolute inset-0 bg-black/70 backdrop-blur-md"
             />
-
-            {/* Modal */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -402,7 +383,6 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
               transition={{ type: "spring", duration: 0.5 }}
               className="relative w-full max-w-lg bg-charcoal rounded-[32px] overflow-hidden border border-gold/20 shadow-2xl p-8 md:p-10 z-10"
             >
-              {/* Close Button */}
               <button
                 onClick={closePurchaseModal}
                 className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white/80 transition-colors"
@@ -411,7 +391,6 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Gold accent bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-gold-light to-gold" />
 
               <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 hover:bg-gold/30">
@@ -425,7 +404,7 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
                 <span className="text-white/40 text-xs ml-1">CAD</span>
               </p>
               <p className="text-sm text-white/50 mb-6 leading-relaxed">
-                Enter your details below — you&apos;ll be securely redirected to PayPal to complete your purchase.
+                Enter your details below &mdash; you&apos;ll be securely redirected to PayPal to complete your purchase.
               </p>
 
               <form onSubmit={onPurchaseSubmit} className="space-y-4">
@@ -496,4 +475,3 @@ export default function BooksClient({ freeBooks, paidBooks }: BooksClientProps) 
     </div>
   );
 }
-

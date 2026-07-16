@@ -115,4 +115,19 @@ export const ALL_BOOKS_QUERY = defineQuery(`
   }
 `);
 
+// ── All Amazon Books ───────────────────────────────────────────────────────────
+export const ALL_AMAZON_BOOKS_QUERY = defineQuery(`
+  *[_type == "amazon"]{
+  _id,
+  name,
+  "slug": slug.current,
+  description,
+  "image": image.asset->url,
+  "amazonLink": amazonStoreLink[]{
+    name,
+    url
+  }
+}
+  `)
+
 
