@@ -1,5 +1,9 @@
 import { Video, MapPin} from "lucide-react";
 import {meetingTypes } from "@/types/book";
+import type { AmazonBook, Book } from "@/types/book";
+export type { Book };
+
+
 export const meetingData: meetingTypes[] = [
   {
     id: "online",
@@ -24,6 +28,14 @@ export const meetingData: meetingTypes[] = [
     link: "https://go.taiwoolanrewaju.org/widget/booking/dIirfxRn3LZE83tX9aDc" // Placeholder
   }
 ];
+
+
+
+export interface BooksClientProps {
+  freeBooks: Book[];
+  paidBooks: Book[];
+  amazonBooks: AmazonBook[];
+}
 
 // ── Flag emoji map for common Amazon store locales ────────────────────────────
 export const FLAG_MAP: Record<string, string> = {
