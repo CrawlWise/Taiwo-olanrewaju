@@ -17,14 +17,8 @@ import { Badge } from "@/components/ui/badge";
 import { BookCard } from "@/components/books/BookCard";
 import { BookCardHardCopy } from "@/components/books/BookCardHardCopy";
 import type { AmazonBook, Book } from "@/types/book";
+import { BooksClientProps } from "@/site-data/book";
 
-export type { Book };
-
-interface BooksClientProps {
-  freeBooks: Book[];
-  paidBooks: Book[];
-  amazonBooks: AmazonBook[];
-}
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -170,9 +164,9 @@ export default function BooksClient({ freeBooks, paidBooks, amazonBooks }: Books
         {/* ==================== FREE BOOKS SECTION ==================== */}
         <div className="mb-24">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold font-poppins text-charcoal mb-4">Free Resources</h2>
+            <h2 className="text-4xl font-bold font-poppins text-charcoal mb-4">Best Financial Guides</h2>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-              Start building your foundation today with these comprehensive complimentary guides.
+              Explore our curated collection of free and premium guides, designed to empower you with the knowledge and strategies to achieve financial independence and build lasting wealth.
             </p>
           </div>
 
@@ -196,46 +190,46 @@ export default function BooksClient({ freeBooks, paidBooks, amazonBooks }: Books
         </div>
 
         {/* ==================== PAID BOOKS SECTION ==================== */}
-  <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-  {/* Paid Books */}
-  <div>
-    {paidBooks.length === 0 ? (
-      <div className="text-center py-12 border-2 border-dashed border-muted rounded-3xl">
-        <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-        <h3 className="text-xl font-semibold text-charcoal">
-          No Premium Books Available
-        </h3>
-        <p className="text-muted-foreground mt-2">
-          Check back soon for new premium guides.
-        </p>
-      </div>
-    ) : (
-      <div className="grid grid-cols-1 gap-8">
-        {paidBooks.map((book, idx) => (
-          <BookCard
-            key={idx}
-            book={book}
-            onPurchaseClick={(b) => handlePurchase(b)}
-          />
-        ))}
-      </div>
-    )}
-  </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          {/* Paid Books */}
+          <div>
+            {paidBooks.length === 0 ? (
+              <div className="text-center py-12 border-2 border-dashed border-muted rounded-3xl">
+                <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-charcoal">
+                  No Premium Books Available
+                </h3>
+                <p className="text-muted-foreground mt-2">
+                  Check back soon for new premium guides.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-8">
+                {paidBooks.map((book, idx) => (
+                  <BookCard
+                    key={idx}
+                    book={book}
+                    onPurchaseClick={(b) => handlePurchase(b)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
 
-  {/* Amazon Hard Copy */}
-  <div>
-    {amazonBooks && amazonBooks.length > 0 && (
-      <div className="grid grid-cols-1 gap-8">
-        {amazonBooks.map((book) => (
-          <BookCardHardCopy
-            key={book._id}
-            book={book}
-          />
-        ))}
-      </div>
-    )}
-  </div>
-</div>
+          {/* Amazon Hard Copy */}
+          <div>
+            {amazonBooks && amazonBooks.length > 0 && (
+              <div className="grid grid-cols-1 gap-8">
+                {amazonBooks.map((book) => (
+                  <BookCardHardCopy
+                    key={book._id}
+                    book={book}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Download Lead Capture Modal */}

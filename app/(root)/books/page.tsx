@@ -1,6 +1,7 @@
 import { sanityFetch } from "@/sanity/live";
 import { ALL_BOOKS_QUERY, ALL_AMAZON_BOOKS_QUERY } from "@/sanity/queries";
-import BooksClient, { Book } from "./BooksClient";
+import BooksClient from "./BooksClient";
+import type { Book } from "@/types/book";
 import type { AmazonBook } from "@/types/book";
 import type { Metadata } from "next";
 
