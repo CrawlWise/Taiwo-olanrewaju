@@ -79,6 +79,18 @@ export default function HomeClient({ initialBlogPosts, initialFreeBook }: HomeCl
         setDownloadSubmitted(true);
         setDownloadName("");
         setDownloadPhone("");
+
+        // Fire-and-forget: save lead to Google Sheets workbook
+        fetch("/api/excel-upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: downloadName,
+            email: downloadEmail,
+            phone: downloadPhone,
+            bookTitle: freeBook?.title || "Free Legacy Roadmap Guide",
+          }),
+        }).catch((err) => console.error("Excel upload error:", err));
       } else {
         const data = await response.json();
         alert(data.error || "Failed to process download request. Please try again.");
@@ -225,8 +237,8 @@ export default function HomeClient({ initialBlogPosts, initialFreeBook }: HomeCl
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24">
             {[
-              { label: "Clients Served", value: "500+", icon: Users },
-              { label: "Financial Plans", value: "1.2k+", icon: TrendingUp },
+              { label: "Clients Served", value: "100+", icon: Users },
+              // { label: "Financial Plans", value: "1.2k+", icon: TrendingUp },
               { label: "Digital Books", value: "3+", icon: BookOpen },
             ].map((stat, i) => (
               <motion.div

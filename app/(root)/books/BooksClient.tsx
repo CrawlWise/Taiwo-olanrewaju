@@ -79,6 +79,18 @@ export default function BooksClient({ freeBooks, paidBooks, amazonBooks }: Books
         setIsSuccess(true);
         setDownloadName("");
         setDownloadPhone("");
+
+        // Fire-and-forget: save lead to Google Sheets workbook
+        fetch("/api/excel-upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: downloadName,
+            email: downloadEmail,
+            phone: downloadPhone,
+            bookTitle: selectedBook.title,
+          }),
+        }).catch((err) => console.error("Excel upload error:", err));
       } else {
         const data = await response.json();
         alert(data.error || "Failed to process download request. Please try again.");
@@ -121,6 +133,18 @@ export default function BooksClient({ freeBooks, paidBooks, amazonBooks }: Books
         setIsPurchaseSubmitting(false);
         return;
       }
+
+      // Fire-and-forget: save purchase lead to Google Sheets workbook
+      fetch("/api/excel-upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: purchaseName,
+          email: purchaseEmail,
+          phone: purchasePhone,
+          bookTitle: purchaseBook.title,
+        }),
+      }).catch((err) => console.error("Excel upload error:", err));
 
       // Email confirmed sent — now redirect to PayPal
       if (purchaseBook.paymentLink) {
