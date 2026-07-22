@@ -89,17 +89,24 @@ export default function AboutPage() {
               </div>
               <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-gold/10 rounded-full blur-3xl -z-10" />
 
-              <div className="absolute -bottom-6 -left-6 glass-dark p-8 rounded-2xl shadow-premium border-gold/20 hidden md:block">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center text-burgundy-dark font-bold text-xl">
-                    10+
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-gold uppercase tracking-tighter">Years of</p>
-                    <p className="text-lg font-bold text-white">Experience</p>
+              {/* Floating Card */}
+                  <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -bottom-8 -left-8 glass p-6 rounded-2xl shadow-premium border-gold/20 max-w-[240px] hidden md:block"
+              >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-burgundy-dark shadow-inner">
+                      <CheckCircle2 className="w-6 h-6" />
+                    </div>
+                    <div>
+                    <p className="text-xs font-bold text-gold uppercase tracking-tighter">Verified Expert</p>
+                    <p className="text-sm font-bold text-white">Licensed Advisor</p>
                   </div>
                 </div>
-              </div>
+                <p className="text-xs text-white/70">Providing strategic financial solutions for over a decade.</p>
+              </motion.div>
+         
             </motion.div>
 
             {/* Biography */}
@@ -160,7 +167,7 @@ export default function AboutPage() {
 
 
       {/* Expertise Section */}
-      <section className="py-24 bg-charcoal text-white">
+      {/* <section className="py-24 bg-charcoal text-white">
         <div className="container mx-auto px-4 text-center">
           <Badge className="mb-6">Global Impact</Badge>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-12">Educating the Next Generation</h2>
@@ -185,7 +192,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* CTA Section */}
       <section className="py-24 bg-white">
